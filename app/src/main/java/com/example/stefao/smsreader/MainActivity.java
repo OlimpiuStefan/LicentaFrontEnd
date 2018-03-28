@@ -15,13 +15,20 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -31,6 +38,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
@@ -69,28 +77,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final TextView TextView = findViewById(R.id.text_view_id);
-        String url = "https://rocky-wave-99733.herokuapp.com/demo";
-        Log.d("INAINTEEEEEE","INAINTEEEEEE");
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        final Button button = findViewById(R.id.button_id);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getData(v);
+            }
+        });
 
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        TextView.setText("Response: " + response.toString());
-                        Log.e("DEMOOOOOOO", response.toString());
-                    }
-                }, new Response.ErrorListener() {
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        TextView.setText("Try again");
-                        Log.e("EROAREEEE","EROAREEEEEE");
-                    }
-                });
-        SingletonRequestQueue.getInstance(this).addToRequestQueue(jsonObjectRequest);
-        Log.e("DUPAAAAAA","DUPAAA");
     }
 
     @Override
@@ -145,6 +139,32 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    public void getData(final View view){
+        String url = "https://rocky-wave-99733.herokuapp.com/demo";
+        Log.d("INAINTEEEEEE","INAINTEEEEEE");
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        ((TextView) findViewById(R.id.text_view_id)).setText(response.toString());
+                        Log.e("DEMOOOOOOO", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        ((TextView) findViewById(R.id.text_view_id)).setText("try again");
+                        Log.e("EROAREEEE","EROAREEEEEE");
+                    }
+                });
+        // SingletonRequestQueue.getInstance(this).addToRequestQueue(jsonObjectRequest);
+        queue.add(jsonObjectRequest);
+        Log.e("DUPAAAAAA","DUPAAA");
     }
 
 }
