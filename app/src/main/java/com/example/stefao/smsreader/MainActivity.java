@@ -1,6 +1,7 @@
 package com.example.stefao.smsreader;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Cache;
 import com.android.volley.Network;
 import com.android.volley.Request;
@@ -32,20 +34,34 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.stefao.smsreader.location.fetcher.LocationUtils;
+import com.example.stefao.smsreader.location.fetcher.UserLocation;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private int MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10;
     private int PERMISSION_ACCESS_COARSE_LOCATION = 11;
-    private FusedLocationProviderClient mFusedLocationClient;
+    private static FusedLocationProviderClient mFusedLocationClient;
+    LocationManager locationManager;
+    LocationUtils locationUtils;
+    UserLocation userLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{Manifest.permission.RECEIVE_SMS},
                 MY_PERMISSIONS_REQUEST_SMS_RECEIVE);
         super.onCreate(savedInstanceState);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
+        locationUtils = new LocationUtils(this, this);
+        userLocation = new UserLocation();
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -71,20 +87,18 @@ public class MainActivity extends AppCompatActivity {
         SmsReceiver.bindListener(new SmsListener() {
             @Override
             public void messageReceived(String messageText) {
+                Log.e("==>", messageText);
+                userLocation.setLocationSetted(false);
                 getLocation();
-                Log.e("Message", messageText);
-                Toast.makeText(MainActivity.this, "Message: " + messageText, Toast.LENGTH_LONG).show();
             }
         });
 
         final Button button = findViewById(R.id.button_id);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getData(v);
+                //getData(v);
             }
         });
-
-
     }
 
     @Override
@@ -117,41 +131,60 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     public void getLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSION_ACCESS_COARSE_LOCATION);
-            System.out.println("in if---------------------------------------");
-        } else {
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                Double latitude = location.getLatitude();
-                                Double longitude = location.getLongitude();
-                                Log.e("LATITUDE", latitude.toString());
-                                Log.e("LONGITUDE", longitude.toString());
-                            }
-                        }
-                    });
-        }
+
+//        Double latitude = locationUtils.getLocation().getLatitude();
+//        Double longitude = locationUtils.getLocation().getLongitude();
+//        Log.e("==>", latitude.toString());
+//        Log.e("==>", longitude.toString());
+//        ((TextView) findViewById(R.id.text_view_id)).setText(latitude.toString());
+//        Toast.makeText(getApplicationContext(), latitude.toString(), Toast.LENGTH_LONG).show();
+
+
+        locationUtils.getLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                // Got last known location. In some rare situations this can be null.
+                if (location != null) {
+                    Double currentLatitude = location.getLatitude();
+                    Double currentLongitude = location.getLongitude();
+                    userLocation.setLatitude(location.getLatitude());
+                    userLocation.setLongitude(location.getLongitude());
+                    userLocation.setLocationSetted(true);
+                    Log.e("==>", currentLatitude.toString());
+                    Log.e("==>", currentLongitude.toString());
+                    Log.e("==>", userLocation.getLatitude() + "");
+                    String nominatimQuery = "https://nominatim.openstreetmap.org/reverse?email=so5olimpiu@yahoo.com&format=json&lat=" + userLocation.getLatitude() + "&lon=" + userLocation.getLongitude() + "&extratags=1&namedetails=1";
+                    getData(nominatimQuery);
+                    ((TextView) findViewById(R.id.text_view_id)).setText(currentLatitude.toString());
+                    Toast.makeText(getApplicationContext(), currentLatitude.toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("==>", "INAINTEEROARE");
+                e.printStackTrace();
+                Log.e("==>", "DUPAEROARE");
+            }
+        });
+        //return locationResult.getResult();
     }
 
-    public void getData(final View view){
-        String url = "https://rocky-wave-99733.herokuapp.com/demo";
-        Log.d("INAINTEEEEEE","INAINTEEEEEE");
+    public void getData(String url) {
+        //String url = "https://rocky-wave-99733.herokuapp.com/demo";
+        Log.d("==>", "INAINTEEEEEE");
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type","application/json");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONObject response) {
                         ((TextView) findViewById(R.id.text_view_id)).setText(response.toString());
-                        Log.e("DEMOOOOOOO", response.toString());
+                        Log.e("==>", response.toString());
                     }
                 }, new Response.ErrorListener() {
 
@@ -159,12 +192,16 @@ public class MainActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         ((TextView) findViewById(R.id.text_view_id)).setText("try again");
-                        Log.e("EROAREEEE","EROAREEEEEE");
+                        Log.e("==>", "EROAREEEEEE");
                     }
-                });
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
+            }
+        };
         // SingletonRequestQueue.getInstance(this).addToRequestQueue(jsonObjectRequest);
         queue.add(jsonObjectRequest);
-        Log.e("DUPAAAAAA","DUPAAA");
+        Log.e("==>", "DUPAAA");
     }
-
 }
