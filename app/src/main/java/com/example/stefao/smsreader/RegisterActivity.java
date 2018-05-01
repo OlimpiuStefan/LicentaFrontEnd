@@ -129,7 +129,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void doAutoLogin(String email, String password) {
         final String username = userCredentials.get(0).getText().toString();
-        String URL = Constants.BASE_URL + "/user/getByUsername/" + username;
+        //final String password = userCredentials.get(1).getText().toString();
+        String URL = Constants.BASE_URL + "/user/getByUsername/" + email;
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -138,7 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST,
+                Request.Method.GET,
                 URL,
                 null,
                 new Response.Listener<JSONObject>() {
@@ -175,7 +176,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         String email = userCredentials.get(0).getText().toString();
         String password = userCredentials.get(1).getText().toString();
-        Double budget = Double.parseDouble(userCredentials.get(2).getText().toString());
+        Float totalBudget = Float.parseFloat(userCredentials.get(2).getText().toString());
+        Log.e("==>", totalBudget.toString());
+        Log.e("==>", totalBudget.getClass().toString());
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -185,7 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
         try {
             user.put("email", email);
             user.put("password", password);
-            user.put("budget", budget);
+            user.put("totalBudget", totalBudget);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -197,7 +200,9 @@ public class RegisterActivity extends AppCompatActivity {
         try {
             body.put("email", jsonRequest.get("email"));
             body.put("password", jsonRequest.get("password"));
-            body.put("budget", jsonRequest.get("budget"));
+            body.put("totalBudget", jsonRequest.get("totalBudget"));
+            Log.e("==>", jsonRequest.get("totalBudget").toString());
+            Log.e("==>", jsonRequest.get("totalBudget").getClass().toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

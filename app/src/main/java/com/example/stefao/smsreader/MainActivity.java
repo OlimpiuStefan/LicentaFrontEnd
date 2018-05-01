@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +35,11 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.stefao.smsreader.Entities.CategoryDTO;
 import com.example.stefao.smsreader.location.fetcher.LocationUtils;
 import com.example.stefao.smsreader.location.fetcher.UserLocation;
+import com.example.stefao.smsreader.utils.Constants;
+import com.example.stefao.smsreader.utils.UserSessionManager;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
@@ -43,6 +47,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -51,8 +57,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.example.stefao.smsreader.utils.UserSessionManager.KEY_EMAIL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
     LocationManager locationManager;
     LocationUtils locationUtils;
     UserLocation userLocation;
+    JSONArray categoriesResponse = new JSONArray();
+    UserSessionManager userSessionManager = new UserSessionManager(this);
+    CategoryAdapter categoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +112,13 @@ public class MainActivity extends AppCompatActivity {
                 //getData(v);
             }
         });
+
+        final ListView listview = (ListView) findViewById(R.id.categories_list);
+        getCategories(Constants.BASE_URL+Constants.GET_CATEGORIES_URL+userSessionManager.getUserDetails().get(KEY_EMAIL));
+        ArrayList<CategoryDTO> categoriesArray = new Gson().fromJson(categoriesResponse.toString(), new TypeToken<List<CategoryDTO>>(){}.getType());
+        categoryAdapter = new CategoryAdapter(this,categoriesArray);
+        listview.setAdapter(categoryAdapter);
+
     }
 
     @Override
@@ -202,6 +222,42 @@ public class MainActivity extends AppCompatActivity {
         };
         // SingletonRequestQueue.getInstance(this).addToRequestQueue(jsonObjectRequest);
         queue.add(jsonObjectRequest);
+        Log.e("==>", "DUPAAA");
+    }
+
+    public void getCategories(String url) {
+        //String url = "https://rocky-wave-99733.herokuapp.com/demo";
+        Log.d("==>", "INAINTEEEEEE");
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type","application/json");
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        ((TextView) findViewById(R.id.text_view_id)).setText(response.toString());
+                        Log.e("==>", response.toString());
+                        categoriesResponse=response;
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        ((TextView) findViewById(R.id.text_view_id)).setText("try again");
+                        Log.e("==>", "EROAREEEEEE");
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
+            }
+        };
+        // SingletonRequestQueue.getInstance(this).addToRequestQueue(jsonObjectRequest);
+        queue.add(jsonArrayRequest);
         Log.e("==>", "DUPAAA");
     }
 }

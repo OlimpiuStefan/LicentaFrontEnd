@@ -52,4 +52,9 @@
         tools:layout_editor_absoluteY="82dp" />
     </LinearLayout>
 
+    <ListView
+        android:id="@+id/categories_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </android.support.design.widget.CoordinatorLayout>
