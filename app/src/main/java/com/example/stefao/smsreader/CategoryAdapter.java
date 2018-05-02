@@ -39,7 +39,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryDTO> {
 
         CategoryDTO currentCategory = categoryList.get(position);
 
-        ImageView image = (ImageView) listItem.findViewById(R.id.imageView_poster);
+        //ImageView image = (ImageView) listItem.findViewById(R.id.imageView_poster);
         //image.setImageResource(currentCategory.getmImageDrawable());
 
         TextView name = (TextView) listItem.findViewById(R.id.textView_name);

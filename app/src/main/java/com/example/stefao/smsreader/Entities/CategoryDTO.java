@@ -1,12 +1,15 @@
 package com.example.stefao.smsreader.Entities;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by stefao on 4/30/2018.
  */
 
-public class CategoryDTO {
+public class CategoryDTO implements Serializable {
 
     private Long id;
 
@@ -56,5 +59,7 @@ public class CategoryDTO {
     public void setTransactions(List<TransactionDTO> transactions) {
         this.transactions = transactions;
     }
+
+
 }
 

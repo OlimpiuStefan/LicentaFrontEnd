@@ -7,6 +7,7 @@ package com.example.stefao.smsreader.utils;
 public class Constants {
     public static final String BASE_URL = "https://rocky-wave-99733.herokuapp.com";
     public static final String GET_CATEGORIES_URL = "/user/getCategoriesByUsername/";
+    public static final String GET_TRANSACTIONS_URL = "/user/getTransactionsByCategoryOfUser/";
     public static final String BASE_SECURE_URL = "https://ancient-wildwood-65338.herokuapp.com/secure";
     private static final String CLIENT_CREDENTIALS = "android-oauth2-client-id:android-oauth2-client-pass";
     public static final String REQUEST_TOKEN_URL = BASE_URL + "/oauth/token?grant_type=password&username=%s&password=%s";

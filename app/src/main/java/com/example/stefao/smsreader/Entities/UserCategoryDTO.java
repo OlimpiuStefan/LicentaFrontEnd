@@ -1,12 +1,13 @@
 package com.example.stefao.smsreader.Entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by stefao on 4/30/2018.
  */
 
-public class UserCategoryDTO {
+public class UserCategoryDTO implements Serializable {
 
     private Long id;
 

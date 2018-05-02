@@ -1,7 +1,9 @@
 package com.example.stefao.smsreader;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -60,6 +63,7 @@ import android.location.LocationManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.example.stefao.smsreader.utils.UserSessionManager.KEY_EMAIL;
@@ -73,11 +77,14 @@ public class MainActivity extends AppCompatActivity {
     LocationUtils locationUtils;
     UserLocation userLocation;
     JSONArray categoriesResponse = new JSONArray();
-    UserSessionManager userSessionManager = new UserSessionManager(this);
+    UserSessionManager userSessionManager;
     CategoryAdapter categoryAdapter;
+    ListView listview;
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mContext=this;
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.RECEIVE_SMS},
                 MY_PERMISSIONS_REQUEST_SMS_RECEIVE);
@@ -113,11 +120,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final ListView listview = (ListView) findViewById(R.id.categories_list);
+        userSessionManager = new UserSessionManager(this);
+        listview = (ListView) findViewById(R.id.categories_list);
+        Log.e("==>",userSessionManager.getUserDetails().get(KEY_EMAIL));
         getCategories(Constants.BASE_URL+Constants.GET_CATEGORIES_URL+userSessionManager.getUserDetails().get(KEY_EMAIL));
+        Log.e("==>>>>",categoriesResponse.toString());
         ArrayList<CategoryDTO> categoriesArray = new Gson().fromJson(categoriesResponse.toString(), new TypeToken<List<CategoryDTO>>(){}.getType());
         categoryAdapter = new CategoryAdapter(this,categoriesArray);
         listview.setAdapter(categoryAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CategoryDTO item = (CategoryDTO)parent.getItemAtPosition(position);
+                Intent intent = new Intent(mContext,TransactionsActivity.class);
+                intent.putExtra("CategoryDTO",item);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -237,9 +257,13 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(JSONArray response) {
-                        ((TextView) findViewById(R.id.text_view_id)).setText(response.toString());
+
                         Log.e("==>", response.toString());
                         categoriesResponse=response;
+                        ArrayList<CategoryDTO> categoriesArray = new Gson().fromJson(categoriesResponse.toString(), new TypeToken<List<CategoryDTO>>(){}.getType());
+                        categoryAdapter.clear();
+                        categoryAdapter.addAll(categoriesArray);
+                        categoryAdapter.notifyDataSetChanged();
 
                     }
                 }, new Response.ErrorListener() {

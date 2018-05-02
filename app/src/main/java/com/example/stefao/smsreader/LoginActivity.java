@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -37,6 +38,8 @@ import com.example.stefao.smsreader.service.LoginService;
 import com.example.stefao.smsreader.utils.UserSessionManager;
 import com.example.stefao.smsreader.utils.Constants;
 import com.example.stefao.smsreader.utils.VolleyUtils;
+
+import static com.example.stefao.smsreader.utils.UserSessionManager.KEY_EMAIL;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -91,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             if (password.equals(response.get("password").toString())) {
                                 loginService.handleResponse(getApplicationContext(), session, response.get("email").toString(), response.get("password").toString());
+                                Log.e("==>>",response.get("email").toString());
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

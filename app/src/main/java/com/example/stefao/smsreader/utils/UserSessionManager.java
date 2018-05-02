@@ -3,6 +3,7 @@ package com.example.stefao.smsreader.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.stefao.smsreader.LoginActivity;
 
@@ -42,7 +43,8 @@ public class UserSessionManager {
         //editor.putString(KEY_FIRST_NAME, firstName);
         //editor.putString(KEY_LAST_NAME, lastName);
         editor.putString(KEY_EMAIL, email);
-        editor.putString(KEY_EMAIL, password);
+        Log.e("==>>>",email);
+        editor.putString(KEY_PASSWORD, password);
         //editor.putString(KEY_ACCESS_TOKEN, accessToken);
         //editor.putString(KEY_REFRESH_TOKEN, refreshToken);
         //editor.putLong(KEY_ACCESS_TOKEN_EXPIRE_TIME, System.currentTimeMillis() / 1000L + expiresIn);
@@ -89,6 +91,7 @@ public class UserSessionManager {
         //user.put(KEY_FIRST_NAME, pref.getString(KEY_FIRST_NAME, null));
         //user.put(KEY_LAST_NAME, pref.getString(KEY_LAST_NAME, null));
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
+        Log.e("==>>>>",pref.getString(KEY_EMAIL,null));
         user.put(KEY_PASSWORD, pref.getString(KEY_PASSWORD, null));
 
         // user access token
