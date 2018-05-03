@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
-            Log.e("==>>>>>>>>",bundle.getString("userLocationLongitude"));
+            Log.e("==>>>>>>>>",String.valueOf(bundle.getDouble("userLocationLongitude")));
         }
     };
 
@@ -161,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         super.onResume();
         Intent intent= new Intent(this, PersistService.class);
         bindService(intent, this, Context.BIND_AUTO_CREATE);
+        registerReceiver(receiver,new IntentFilter(PersistService.AVAILABLE_DATA));
     }
 
 
