@@ -12,6 +12,7 @@ import java.util.Map;
 
 import android.os.Binder;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -22,6 +23,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.stefao.smsreader.Entities.TransactionDTO;
+import com.example.stefao.smsreader.R;
 import com.example.stefao.smsreader.RegisterActivity;
 import com.example.stefao.smsreader.SmsListener;
 import com.example.stefao.smsreader.SmsReceiver;
@@ -29,6 +32,7 @@ import com.example.stefao.smsreader.location.fetcher.LocationUtils;
 import com.example.stefao.smsreader.location.fetcher.UserLocation;
 import com.example.stefao.smsreader.service.LoginService;
 import com.example.stefao.smsreader.utils.Constants;
+import com.example.stefao.smsreader.utils.UserSessionManager;
 import com.example.stefao.smsreader.utils.VolleyUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,16 +40,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.example.stefao.smsreader.utils.UserSessionManager.KEY_EMAIL;
+
 /**
  * Created by stefao on 4/15/2018.
  */
 
 public class PersistService extends Service {
     private final IBinder mBinder = new MyBinder();
-    public static final String AVAILABLE_DATA="com.example.stefao.smsreader.AVAILABLE_DATA";
+    public static final String AVAILABLE_DATA = "com.example.stefao.smsreader.AVAILABLE_DATA";
     private Intent result = new Intent(AVAILABLE_DATA);
     LocationUtils locationUtils = new LocationUtils(this);
     UserLocation userLocation = new UserLocation();
+    TransactionDTO userTransaction = new TransactionDTO();
+    UserSessionManager userSessionManager;
 
 
     @Override
@@ -56,7 +64,7 @@ public class PersistService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        processLocationAndPoi();
+        //processLocationAndPoi();
         return mBinder;
     }
 
@@ -75,12 +83,19 @@ public class PersistService extends Service {
         return result;
     }
 
-    private void processLocationAndPoi() {
+    public void processLocationAndPoi() {
         SmsReceiver.bindListener(new SmsListener() {
             @Override
             public void messageReceived(String messageText) {
                 Log.e("==>", messageText);
                 userLocation.setLocationSetted(false);
+                String[] result = parseMessage(messageText);
+                Log.e("===>",result[0]);
+                Log.e("===>",result[0].getClass().toString());
+                Log.e("===>",result[1]);
+                userTransaction.setAmount(Double.parseDouble(result[0]));
+                userTransaction.setMessage(messageText);
+                userTransaction.setDate(result[1]);
                 getLocation();
             }
         });
@@ -102,11 +117,11 @@ public class PersistService extends Service {
                     Log.e("==>", currentLatitude.toString());
                     Log.e("==>", currentLongitude.toString());
                     Log.e("==>", userLocation.getLatitude() + "");
-                    String nominatimQuery = "https://nominatim.openstreetmap.org/reverse?email=so5olimpiu@yahoo.com&format=json&lat=" + userLocation.getLatitude() + "&lon=" + userLocation.getLongitude() + "&extratags=1&namedetails=1";
+                    String nominatimQuery = "https://nominatim.openstreetmap.org/reverse?email=so5olimpiu@yahoo.com&format=json&lat=" + "46.76843" + "&lon=" + "23.58898" + "&extratags=1&namedetails=1";
                     getData(nominatimQuery);
                     Toast.makeText(getApplicationContext(), currentLatitude.toString(), Toast.LENGTH_LONG).show();
-                    result.putExtra("userLocationLatitude",userLocation.getLatitude());
-                    result.putExtra("userLocationLongitude",userLocation.getLongitude());
+                    result.putExtra("userLocationLatitude", userLocation.getLatitude());
+                    result.putExtra("userLocationLongitude", userLocation.getLongitude());
 
                 }
             }
@@ -126,7 +141,7 @@ public class PersistService extends Service {
         Log.d("==>", "INAINTEEEEEE");
         RequestQueue queue = Volley.newRequestQueue(this);
         final Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type","application/json");
+        headers.put("Content-Type", "application/json");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -134,8 +149,12 @@ public class PersistService extends Service {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.e("==>", response.toString());
-                        result.putExtra("responseJson",response.toString());
+                        result.putExtra("responseJson", response.toString());
                         sendBroadcast(result);
+                        addPoi(46.76843,23.58898,response);
+                        userSessionManager = new UserSessionManager(getApplicationContext());
+                        Log.e("sesiunea",userSessionManager.getUserDetails().get(KEY_EMAIL));
+                        addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),Long.valueOf(4),userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
                     }
                 }, new Response.ErrorListener() {
 
@@ -144,7 +163,7 @@ public class PersistService extends Service {
                         error.printStackTrace();
                         Log.e("==>", "EROAREEEEEE");
                     }
-                }){
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 return headers;
@@ -166,7 +185,7 @@ public class PersistService extends Service {
             requestBody.put("latitude", latitude);
             requestBody.put("longitude", longitude);
             requestBody.put("name", response.getString("display_name"));
-            requestBody.put("type",response.getString(response.getJSONObject("address").keys().next()));
+            requestBody.put("type", response.getJSONObject("address").keys().next()).toString();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -184,7 +203,7 @@ public class PersistService extends Service {
                     @Override
                     public void onResponse(JSONObject response) {
                         {
-                            Log.e("==>",response.toString());
+                            Log.e("==>", response.toString());
                         }
                     }
                 },
@@ -203,13 +222,108 @@ public class PersistService extends Service {
                         }
                     }
                 }
-        )
-        {
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 return headers;
             }
         };
         requestQueue.add(request);
+    }
+
+    public void addTransaction(String username, Long categoryId, double amount, String date, String message) {
+
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        final JSONObject requestBody = new JSONObject();
+
+        try {
+            requestBody.put("amount", amount);
+            requestBody.put("date", date);
+            requestBody.put("message", message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        String URL = Constants.ADD_TRANSACTION_TO_USER_URL+"/"+username+"/"+categoryId;
+
+        final RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                URL,
+                requestBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        {
+                            Log.e("==>", response.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof NoConnectionError) {
+                            VolleyUtils.buildAlertDialog(Constants.ERROR_TITLE, Constants.NO_CONNECTION, getApplicationContext());
+                        } else {
+                            if (error.networkResponse != null) {
+                                int statusCode = error.networkResponse.statusCode;
+                                if (statusCode >= 500) {
+                                    VolleyUtils.buildAlertDialog(Constants.ERROR_TITLE, Constants.SERVER_DOWN, getApplicationContext());
+                                }
+                            }
+                        }
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
+            }
+        };
+        requestQueue.add(request);
+    }
+
+    public String[] parseMessage(String message) {
+        char[] messageChar = message.toCharArray();
+        int dotCount = 0;
+        String amount = "";
+        String date = "";
+        boolean dotCount1=false;
+        boolean dotCount5=false;
+        for (int i = 0; i < messageChar.length; i++) {
+            if (dotCount == 1 && dotCount1==false) {
+                int j = i;
+                while (messageChar[j] != 'a') {
+                    j++;
+                }
+                j++;
+                j++;
+                while (messageChar[j] != ' ') {
+                    amount += messageChar[j];
+                    j++;
+                }
+                dotCount1=true;
+            }
+            if (dotCount == 5 && dotCount5==false) {
+                int j = i + 1;
+                while (messageChar[j] != ' ') {
+                    date += messageChar[j];
+                    j++;
+                }
+                dotCount5=true;
+
+            }
+            if (messageChar[i] == '.') {
+                dotCount++;
+            }
+        }
+        String[] result = new String[2];
+        result[0]=amount;
+        result[1]=date;
+        return result;
     }
 }

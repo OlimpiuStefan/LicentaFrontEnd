@@ -22,16 +22,16 @@ public class SmsReceiver extends BroadcastReceiver {
 
         Object[] pdus = (Object[]) data.get("pdus");
 
-        for (int i = 0; i < pdus.length; i++) {
-            SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
+        //for (int i = 0; i < pdus.length; i++) {
+        SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[0]);
 
-            String sender = smsMessage.getDisplayOriginatingAddress();
-            //Check the sender to filter messages which we require to read
-            String messageBody = smsMessage.getMessageBody();
-            //Pass the message text to interface
-            mListener.messageReceived(messageBody);
-            Log.e("Message",messageBody);
-        }
+        String sender = smsMessage.getDisplayOriginatingAddress();
+        //Check the sender to filter messages which we require to read
+        String messageBody = smsMessage.getMessageBody();
+        //Pass the message text to interface
+        mListener.messageReceived(messageBody);
+        Log.e("Message", messageBody);
+        //}
 
     }
 
