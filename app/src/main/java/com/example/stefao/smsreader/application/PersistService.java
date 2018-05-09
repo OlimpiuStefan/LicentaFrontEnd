@@ -154,7 +154,22 @@ public class PersistService extends Service {
                         addPoi(46.76843,23.58898,response);
                         userSessionManager = new UserSessionManager(getApplicationContext());
                         Log.e("sesiunea",userSessionManager.getUserDetails().get(KEY_EMAIL));
-                        addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),Long.valueOf(4),userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
+                        String categoryName="";
+                        try {
+                            categoryName = response.getJSONObject("address").keys().next();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
+//                        String poiName ="";
+//                        try {
+//                            poiName= response.getString("display_name");
+//                            Log.e("====>",poiName);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                        addTransactionToPoi(poiName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
                     }
                 }, new Response.ErrorListener() {
 
@@ -231,7 +246,7 @@ public class PersistService extends Service {
         requestQueue.add(request);
     }
 
-    public void addTransaction(String username, Long categoryId, double amount, String date, String message) {
+    public void addTransaction(String username, String subcategory, double amount, String date, String message) {
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -247,7 +262,63 @@ public class PersistService extends Service {
         }
 
 
-        String URL = Constants.ADD_TRANSACTION_TO_USER_URL+"/"+username+"/"+categoryId;
+        String URL = Constants.ADD_TRANSACTION_TO_USER_URL+"/"+username+"/"+subcategory;
+
+        final RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                URL,
+                requestBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        {
+                            Log.e("==>", response.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof NoConnectionError) {
+                            VolleyUtils.buildAlertDialog(Constants.ERROR_TITLE, Constants.NO_CONNECTION, getApplicationContext());
+                        } else {
+                            if (error.networkResponse != null) {
+                                int statusCode = error.networkResponse.statusCode;
+                                if (statusCode >= 500) {
+                                    VolleyUtils.buildAlertDialog(Constants.ERROR_TITLE, Constants.SERVER_DOWN, getApplicationContext());
+                                }
+                            }
+                        }
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
+            }
+        };
+        requestQueue.add(request);
+    }
+
+    public void addTransactionToPoi(String name, double amount, String date, String message) {
+
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        final JSONObject requestBody = new JSONObject();
+
+        try {
+            requestBody.put("amount", amount);
+            requestBody.put("date", date);
+            requestBody.put("message", message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        String URL = Constants.ADD_TRANSACTION_TO_POI_URL+"/"+name;
 
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
 

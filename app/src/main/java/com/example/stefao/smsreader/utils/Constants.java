@@ -17,6 +17,7 @@ public class Constants {
     public static final String ADD_POI_URL = BASE_URL +"/poi/add";
 
     public static final String ADD_TRANSACTION_TO_USER_URL = BASE_URL +"/user/addTransaction";
+    public static final String ADD_TRANSACTION_TO_POI_URL = BASE_URL +"/poi/addTransactionToPoi";
     public static final String GET_ALL_GALLERIES_URL = BASE_URL + "/gallery/get/all";
 
     //error messages
