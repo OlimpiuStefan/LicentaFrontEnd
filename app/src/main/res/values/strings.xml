@@ -2,4 +2,51 @@
     <string name="app_name">SmsReader</string>
     <string name="action_settings">Settings</string>
     <string name="self_destruct">click me </string>
+    <string name="recommend">Recommend POI </string>
+    <string name="category_prompt">Choose a category</string>
+    <string name="feedback_prompt">Choose the feedback</string>
+    <string name="categories">Categories</string>
+    <string name="categoriesDescription">Categories description</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="noAccount">No account yet? Create one</string>
+    <string name="alreadyMember">Already a member? Login</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="register">REGISTER</string>
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
+    <string name="email">Email</string>
+    <string name="logout">Logout</string>
+    <string name="logout_desc">Enough for me</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="transition_string">Transition test</string>
+    <string name="write_review">Write Review</string>
+    <string name="backdrop_title">LOVE MUSIC</string>
+    <string name="backdrop_subtitle">This season top 20 albums</string>
+    <string name="login_text">LOGIN</string>
+    <string name="galleries">Galleries</string>
+    <string name="galleries_desc">I want to explore</string>
+    <string name="poi">Points of interest</string>
+    <string name="recommend_menu">Recommend me something</string>
+    <string name="recommend_menu_descr">Choose a category and see what it's best for you</string>
+    <string name="position">Where am I?</string>
+    <string name="poi_desc">I\'m hungry</string>
+    <string name="settings">Settings</string>
+    <string name="settings_desc">I\'ll do it myself</string>
+
+    <string-array name="category_array">
+        <item>subcategory1</item>
+        <item>subcategory2</item>
+        <item>subcategory3</item>
+        <item>clothes</item>
+    </string-array>
+
+    <string-array name="feedback_array">
+        <item>quality</item>
+        <item>price</item>
+        <item>accesibility</item>
+        <item>amability</item>
+    </string-array>
 </resources>

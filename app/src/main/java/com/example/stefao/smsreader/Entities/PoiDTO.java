@@ -79,4 +79,16 @@ public class PoiDTO implements Serializable {
     public void setTransactions(List<TransactionDTO> transactions) {
         this.transactions = transactions;
     }
+
+    @Override
+    public String toString() {
+        return "PoiDTO{" +
+                "id=" + id +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", transactions=" + transactions +
+                '}';
+    }
 }

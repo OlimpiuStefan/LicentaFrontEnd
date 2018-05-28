@@ -151,7 +151,6 @@ public class PersistService extends Service {
                         Log.e("==>", response.toString());
                         result.putExtra("responseJson", response.toString());
                         sendBroadcast(result);
-                        addPoi(46.76843,23.58898,response);
                         userSessionManager = new UserSessionManager(getApplicationContext());
                         Log.e("sesiunea",userSessionManager.getUserDetails().get(KEY_EMAIL));
                         String categoryName="";
@@ -160,7 +159,7 @@ public class PersistService extends Service {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
+                        addPoi(46.76843,23.58898,response,userSessionManager.getUserDetails().get(KEY_EMAIL));
                         addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
 //                        String poiName ="";
 //                        try {
@@ -189,7 +188,7 @@ public class PersistService extends Service {
         Log.e("==>", "DUPAAA");
     }
 
-    public void addPoi(double latitude, double longitude, JSONObject response) {
+    public void addPoi(double latitude, double longitude, JSONObject response, String username) {
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -206,7 +205,7 @@ public class PersistService extends Service {
         }
 
 
-        String URL = Constants.ADD_POI_URL;
+        String URL = Constants.ADD_POI_URL+"/"+username;
 
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
 
