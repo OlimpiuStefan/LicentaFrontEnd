@@ -18,8 +18,13 @@ public class Constants {
     public static final String ADD_POI_URL = BASE_URL +"/poi/add";
     public static final String ADD_CATEGORY_URL = BASE_URL +"/user/addCategory";
     public static final String ADD_CATEGORY2_URL = BASE_URL +"/user/addCategory2";
+    public static final String SET_CATEGORY_BUDGET_URL = BASE_URL +"/user/setCategoryBudget";
+    public static final String GET_EXPENSES_BY_CATEGORY_URL = BASE_URL +"/user/getExpensesByCategory";
+    public static final String GET_POI_FOR_TRANSACTION_URL = BASE_URL +"/poi/getPoiForTransaction";
     public static final String RECOMMEND_BY_FREQUENCY = BASE_URL +"/recommend/frequency";
     public static final String RECOMMEND_BY_RATING = BASE_URL +"/recommendPoiByRating";
+    public static final String IS_CATEGORY_PRESENT = BASE_URL +"/user/isCategoryPresent";
+    public static final String GET_USER_CATEGORY_BUDGET_URL = BASE_URL + "/user/getUserCategoryBudget";
 
     public static final String ADD_TRANSACTION_TO_USER_URL = BASE_URL +"/user/addTransaction";
     public static final String ADD_TRANSACTION_TO_POI_URL = BASE_URL +"/poi/addTransactionToPoi";

@@ -62,6 +62,7 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".NewTransactionReceiver" />
         <service android:name=".application.PersistService"
             android:enabled="true"/>
     </application>

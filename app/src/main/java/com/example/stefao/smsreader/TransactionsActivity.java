@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -84,6 +85,8 @@ public class TransactionsActivity extends AppCompatActivity {
 
         userSessionManager = new UserSessionManager(this);
         listViewTransactions = (ListView) findViewById(R.id.transactions_list);
+        ViewGroup headerView = (ViewGroup)getLayoutInflater().inflate(R.layout.transactions_header, listViewTransactions,false);
+        listViewTransactions.addHeaderView(headerView);
         Log.e("==>",userSessionManager.getUserDetails().get(KEY_EMAIL));
         CategoryDTO clickedCategory = (CategoryDTO)getIntent().getExtras().get("CategoryDTO");
         getTransactions(Constants.BASE_URL+Constants.GET_TRANSACTIONS_URL+userSessionManager.getUserDetails().get(KEY_EMAIL)+"/"+clickedCategory.getId());

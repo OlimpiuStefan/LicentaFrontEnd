@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -13,8 +14,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -22,6 +25,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -59,6 +63,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 import static com.example.stefao.smsreader.utils.UserSessionManager.KEY_EMAIL;
 
 public class MainActivity extends AppCompatActivity implements ServiceConnection {
@@ -94,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     ProgressDialog pDialogFetch;
     //private Spinner spinner1, spinner2;
     //private Button btnSubmit;
+    private Button setBudgetBtn;
 
 
     @Override
@@ -136,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         ArrayList<CategoryDTO> categoriesArray = new Gson().fromJson(categoriesResponse.toString(), new TypeToken<List<CategoryDTO>>(){}.getType());
         categoryAdapter = new CategoryAdapter(this,categoriesArray);
         listview.setAdapter(categoryAdapter);
+
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -183,7 +192,75 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         //addItemsOnSpinner2();
         //addListenerOnButton();
         //addListenerOnSpinnerItemSelection();
+        ButterKnife.bind(this);
+        //addListenerOnButtonSetBudget();
 
+    }
+
+//    public void addListenerOnButtonSetBudget() {
+//        setBudgetBtn = (Button) findViewById(R.id.button_setBudget);
+//        setBudgetBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final int position = listview.getPositionForView((View) v.getParent());
+//                Log.e("butonul clickuit", String.valueOf(position));
+//                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+//                builder.setTitle("Insert an amount");
+//
+//// Set up the input
+//                final EditText input = new EditText(mContext);
+//// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+//                input.setInputType(InputType.TYPE_CLASS_TEXT);
+//                builder.setView(input);
+//
+//// Set up the buttons
+//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Log.e("budget",input.getText().toString());
+//                    }
+//                });
+//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                });
+//
+//                builder.show();
+//            }
+//
+//        });
+//
+//    };
+
+    public void clickedSetBudget(View view){
+        Button setBudgetButton = (Button)view;
+        final int position = listview.getPositionForView((View) view.getParent());
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Insert an amount");
+        final CategoryDTO categoryDTO = (CategoryDTO)listview.getAdapter().getItem(position);
+
+        final EditText input = new EditText(mContext);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.e("budget",input.getText().toString());
+                setCategoryBudget(categoryDTO.getId(),userSessionManager.getUserDetails().get(KEY_EMAIL),Float.parseFloat(input.getText().toString()));
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
 
@@ -421,6 +498,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                         categoryAdapter.clear();
                         categoryAdapter.addAll(categoriesArray);
                         categoryAdapter.notifyDataSetChanged();
+                        Utility.setListViewHeightBasedOnChildren(listview);
                         pDialogFetch.hide();
                     }
                 }, new Response.ErrorListener() {
@@ -497,6 +575,51 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                             }
                         }
                         pDialog.hide();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
+            }
+        };
+        requestQueue.add(request);
+    }
+
+    public void setCategoryBudget(Long categoryId, String username, float categoryBudget) {
+
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        String URL = Constants.SET_CATEGORY_BUDGET_URL+"/"+categoryBudget+"/"+categoryId+"/"+username;
+
+        final RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                URL,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        {
+                            Log.e("==>", response.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof NoConnectionError) {
+                            VolleyUtils.buildAlertDialog(Constants.ERROR_TITLE, Constants.NO_CONNECTION, getApplicationContext());
+                        } else {
+                            if (error.networkResponse != null) {
+                                int statusCode = error.networkResponse.statusCode;
+                                if (statusCode >= 500) {
+                                    VolleyUtils.buildAlertDialog(Constants.ERROR_TITLE, Constants.SERVER_DOWN, getApplicationContext());
+                                }
+                            }
+                        }
                     }
                 }
         ) {
@@ -652,6 +775,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                         poiAdapter.clear();
                         poiAdapter.addAll(poisArray);
                         poiAdapter.notifyDataSetChanged();
+                        Utility.setListViewHeightBasedOnChildren(poiListView);
                         //pDialogFetch.hide();
                     }
                 }, new Response.ErrorListener() {

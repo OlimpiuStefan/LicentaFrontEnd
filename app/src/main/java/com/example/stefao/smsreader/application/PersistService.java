@@ -1,7 +1,9 @@
 package com.example.stefao.smsreader.application;
 
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.Service;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.IBinder;
@@ -11,7 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.os.Binder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,8 +29,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.stefao.smsreader.CategoryAdapter;
+import com.example.stefao.smsreader.Entities.CategoryDTO;
 import com.example.stefao.smsreader.Entities.TransactionDTO;
+import com.example.stefao.smsreader.NewTransactionReceiver;
 import com.example.stefao.smsreader.R;
 import com.example.stefao.smsreader.RegisterActivity;
 import com.example.stefao.smsreader.SmsListener;
@@ -54,6 +65,8 @@ public class PersistService extends Service {
     UserLocation userLocation = new UserLocation();
     TransactionDTO userTransaction = new TransactionDTO();
     UserSessionManager userSessionManager;
+    String categoryName;
+    AlertDialog.Builder builder;
 
 
     @Override
@@ -118,6 +131,7 @@ public class PersistService extends Service {
                     Log.e("==>", currentLongitude.toString());
                     Log.e("==>", userLocation.getLatitude() + "");
                     String nominatimQuery = "https://nominatim.openstreetmap.org/reverse?email=so5olimpiu@yahoo.com&format=json&lat=" + "46.76843" + "&lon=" + "23.58898" + "&extratags=1&namedetails=1";
+                    //String nominatimQuery = "https://nominatim.openstreetmap.org/reverse?email=so5olimpiu@yahoo.com&format=json&lat=" + "46.76833" + "&lon=" + "23.58923" + "&extratags=1&namedetails=1";
                     getData(nominatimQuery);
                     Toast.makeText(getApplicationContext(), currentLatitude.toString(), Toast.LENGTH_LONG).show();
                     result.putExtra("userLocationLatitude", userLocation.getLatitude());
@@ -153,14 +167,18 @@ public class PersistService extends Service {
                         sendBroadcast(result);
                         userSessionManager = new UserSessionManager(getApplicationContext());
                         Log.e("sesiunea",userSessionManager.getUserDetails().get(KEY_EMAIL));
-                        String categoryName="";
+                        //String categoryName="";
                         try {
                             categoryName = response.getJSONObject("address").keys().next();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                         addPoi(46.76843,23.58898,response,userSessionManager.getUserDetails().get(KEY_EMAIL));
-                        addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
+                       // addPoi(46.76833,23.58923,response,userSessionManager.getUserDetails().get(KEY_EMAIL));
+                        String url = Constants.IS_CATEGORY_PRESENT+"/"+userSessionManager.getUserDetails().get(KEY_EMAIL)+"/"+categoryName;
+                        isCategoryPresent(url);
+                        //addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
 //                        String poiName ="";
 //                        try {
 //                            poiName= response.getString("display_name");
@@ -245,7 +263,7 @@ public class PersistService extends Service {
         requestQueue.add(request);
     }
 
-    public void addTransaction(String username, String subcategory, double amount, String date, String message) {
+    public void addTransaction(final String username, final String subcategory, double amount, String date, String message) {
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -274,6 +292,9 @@ public class PersistService extends Service {
                     public void onResponse(JSONObject response) {
                         {
                             Log.e("==>", response.toString());
+                            String url = Constants.GET_USER_CATEGORY_BUDGET_URL+"/"+subcategory+"/"+username;
+                            getUserCategoryBudget(url);
+
                         }
                     }
                 },
@@ -355,6 +376,125 @@ public class PersistService extends Service {
             }
         };
         requestQueue.add(request);
+    }
+
+    public void isCategoryPresent (String url) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type","application/json");
+
+
+        StringRequest jsonObjectRequest = new StringRequest
+                (Request.Method.GET, url,  new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        boolean isCategoryPresent = Boolean.parseBoolean(response.toString());
+                        if (isCategoryPresent==false){
+                            Intent intentAction = new Intent(getApplicationContext(),NewTransactionReceiver.class);
+
+                            //This is optional if you have more than one buttons and want to differentiate between two
+                            intentAction.putExtra("username",userSessionManager.getUserDetails().get(KEY_EMAIL));
+                            intentAction.putExtra("categoryName", categoryName);
+                            intentAction.putExtra("amount", userTransaction.getAmount());
+                            intentAction.putExtra("date",userTransaction.getDate());
+                            intentAction.putExtra("message",userTransaction.getMessage());
+
+                            PendingIntent newTransactionPendingIntent =
+                                    PendingIntent.getBroadcast(getApplicationContext(), 0, intentAction, 0);
+
+                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "default")
+                                    .setSmallIcon(R.drawable.spinner_background)
+                                    .setContentTitle("new category detected")
+                                    .setContentText("You made a transaction in a new category: "+categoryName+". Do you want it to be added to your categories")
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                    .setContentIntent(newTransactionPendingIntent)
+                                    .addAction(R.drawable.spinner_background, "yes",
+                                            newTransactionPendingIntent);
+
+                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+                            notificationManager.notify(2, mBuilder.build());
+//                            builder = new AlertDialog.Builder(getApplicationContext());
+//                            builder.setTitle("Do you want the new category "+categoryName+"?" );
+//
+//                            final EditText input = new EditText(getApplicationContext());
+//                            input.setInputType(InputType.TYPE_CLASS_TEXT);
+//                            builder.setView(input);
+//
+//                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    Log.e("budget",input.getText().toString());
+//                                    addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
+//                                }
+//                            });
+//
+//                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    dialog.cancel();
+//                                }
+//                            });
+//
+//                            builder.show();
+                        }
+                        else{
+                            addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
+    public void getUserCategoryBudget (String url) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type","application/json");
+
+
+        StringRequest jsonObjectRequest = new StringRequest
+                (Request.Method.GET, url,  new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                            float remainedBudget = Float.parseFloat(response.toString());
+                            if (remainedBudget<0) {
+                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "default")
+                                        .setSmallIcon(R.drawable.spinner_background)
+                                        .setContentTitle("BANII MAA")
+                                        .setContentText("nu mai ai bani ma muie pentru "+categoryName)
+                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+                                notificationManager.notify(1, mBuilder.build());
+                            }
+
+                        }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
     }
 
     public String[] parseMessage(String message) {

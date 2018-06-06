@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.stefao.smsreader.MainActivity">
 
-    <include layout="@layout/content_main" />
+    <!--<include layout="@layout/content_main" />-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -29,27 +29,50 @@
             android:layout_height="wrap_content" />
 
         <!--<Button-->
-            <!--android:id="@+id/button_id"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="48dp"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:text="@string/self_destruct"-->
-            <!--tools:layout_editor_absoluteY="82dp" />-->
+        <!--android:id="@+id/button_id"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:text="@string/self_destruct"-->
+        <!--tools:layout_editor_absoluteY="82dp" />-->
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/LinearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
 
-        <ListView
-            android:id="@+id/categories_list"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dip">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="The categories with budget" />
+
+            <ListView
+                android:id="@+id/categories_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="Give your visited places a feedback" />
+
+            <ListView
+                android:id="@+id/pois_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/LinearLayout3"
@@ -67,47 +90,47 @@
     </LinearLayout>
 
     <!--<LinearLayout-->
-        <!--android:id="@+id/LinearLayout4"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="vertical">-->
+    <!--android:id="@+id/LinearLayout4"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="vertical">-->
 
-        <!--&lt;!&ndash;<Button&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/recommend_button"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="48dp"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_centerInParent="true"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:text="@string/recommend"&ndash;&gt;-->
-            <!--&lt;!&ndash;tools:layout_editor_absoluteY="82dp" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<Button&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/recommend_button"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_height="48dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_centerInParent="true"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:text="@string/recommend"&ndash;&gt;-->
+    <!--&lt;!&ndash;tools:layout_editor_absoluteY="82dp" />&ndash;&gt;-->
 
-        <!--<Spinner-->
-            <!--android:id="@+id/spinner1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:entries="@array/category_array"-->
-            <!--android:prompt="@string/category_prompt" />-->
+    <!--<Spinner-->
+    <!--android:id="@+id/spinner1"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:entries="@array/category_array"-->
+    <!--android:prompt="@string/category_prompt" />-->
 
-        <!--<Button-->
-            <!--android:id="@+id/btnSubmit"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Submit" />-->
+    <!--<Button-->
+    <!--android:id="@+id/btnSubmit"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Submit" />-->
 
     <!--</LinearLayout>-->
 
-    <LinearLayout
-        android:id="@+id/LinearLayout5"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+    <!--<LinearLayout-->
+    <!--android:id="@+id/LinearLayout5"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="vertical">-->
 
-        <ListView
-            android:id="@+id/pois_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible" />
+    <!--<ListView-->
+    <!--android:id="@+id/pois_list"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:visibility="visible" />-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 </android.support.design.widget.CoordinatorLayout>
