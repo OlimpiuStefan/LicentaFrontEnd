@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.stefao.smsreader.MainActivity">
+    tools:context="com.example.stefao.smsreader.view.categories.MainActivity">
 
     <!--<include layout="@layout/content_main" />-->
 
@@ -81,7 +81,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <com.example.stefao.smsreader.MultiSpinner
+        <com.example.stefao.smsreader.view.utils.MultiSpinner
             android:id="@+id/spinnerMulti"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

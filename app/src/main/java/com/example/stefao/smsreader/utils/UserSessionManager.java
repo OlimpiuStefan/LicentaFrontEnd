@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.example.stefao.smsreader.LoginActivity;
+import com.example.stefao.smsreader.view.login.LoginActivity;
 
 import java.util.HashMap;
 

@@ -9,8 +9,6 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.example.stefao.smsreader.MainActivity;
-
 /**
  * Created by stefao on 4/1/2018.
  */
