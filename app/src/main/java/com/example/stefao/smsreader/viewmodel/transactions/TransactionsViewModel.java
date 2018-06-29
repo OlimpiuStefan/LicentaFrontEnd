@@ -1,5 +1,6 @@
 package com.example.stefao.smsreader.viewmodel.transactions;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
@@ -35,14 +36,17 @@ public class TransactionsViewModel {
 
     JSONArray transactionsResponse = new JSONArray();
 
-    public TransactionsViewModel(){}
+    ProgressDialog pDialogFetch;
+
+    public TransactionsViewModel() {
+    }
 
     public void getTransactions(String url, Context context, final TransactionAdapter transactionAdapter) {
         //String url = "https://rocky-wave-99733.herokuapp.com/demo";
         Log.d("==>", "INAINTEEEEEE");
         RequestQueue queue = Volley.newRequestQueue(context);
         final Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type","application/json");
+        headers.put("Content-Type", "application/json");
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -51,8 +55,9 @@ public class TransactionsViewModel {
                     public void onResponse(JSONArray response) {
 
                         Log.e("==>", response.toString());
-                        transactionsResponse=response;
-                        ArrayList<TransactionDTO> transactionsArray = new Gson().fromJson(transactionsResponse.toString(), new TypeToken<List<TransactionDTO>>(){}.getType());
+                        transactionsResponse = response;
+                        ArrayList<TransactionDTO> transactionsArray = new Gson().fromJson(transactionsResponse.toString(), new TypeToken<List<TransactionDTO>>() {
+                        }.getType());
                         transactionAdapter.clear();
                         transactionAdapter.addAll(transactionsArray);
                         transactionAdapter.notifyDataSetChanged();
@@ -66,7 +71,7 @@ public class TransactionsViewModel {
                         //((TextView) findViewById(R.id.text_view_id)).setText("try again");
                         Log.e("==>", "EROAREEEEEE");
                     }
-                }){
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 return headers;
@@ -80,7 +85,12 @@ public class TransactionsViewModel {
     public void getPoiForTransaction(String url, Context mContext, final TransactionAdapter.TransactionViewHolder holder) {
         RequestQueue queue = Volley.newRequestQueue(mContext);
         final Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type","application/json");
+        headers.put("Content-Type", "application/json");
+        pDialogFetch = new ProgressDialog(mContext);
+        pDialogFetch.setTitle("Fetching your transactions");
+        pDialogFetch.setMessage("Please wait...");
+        pDialogFetch.setCancelable(false);
+        pDialogFetch.show();
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -89,8 +99,11 @@ public class TransactionsViewModel {
                     public void onResponse(JSONObject response) {
 
                         Log.e("==>", response.toString());
-                        PoiDTO poiDTO = new Gson().fromJson(response.toString(), new TypeToken<PoiDTO>(){}.getType());
+                        PoiDTO poiDTO = new Gson().fromJson(response.toString(), new TypeToken<PoiDTO>() {
+                        }.getType());
                         holder.nameTextView.setText(poiDTO.getName());
+                        pDialogFetch.hide();
+                        pDialogFetch.cancel();
                     }
                 }, new Response.ErrorListener() {
 
@@ -99,8 +112,9 @@ public class TransactionsViewModel {
                         error.printStackTrace();
                         Log.e("==>", "EROAREEEEEE");
                         //pDialogFetch.hide();
+                        pDialogFetch.hide();
                     }
-                }){
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 return headers;

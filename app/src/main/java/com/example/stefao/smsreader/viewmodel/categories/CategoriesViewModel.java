@@ -64,7 +64,12 @@ public class CategoriesViewModel {
                         expenses = Float.parseFloat(response.toString());
 
                         Log.e("expenses",String.valueOf(expenses));
-                        holder.progressBar.setProgress(Math.round(expenses));
+                        if (expenses>0) {
+                            holder.progressBar.setProgress(Math.round(expenses));
+                        }
+                        else{
+                            holder.progressBar.setProgress(0);
+                        }
                     }
                 }, new Response.ErrorListener() {
 

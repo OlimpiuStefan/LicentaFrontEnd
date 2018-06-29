@@ -1,6 +1,7 @@
 package com.example.stefao.smsreader.application;
 
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
@@ -165,10 +166,10 @@ public class PersistService extends Service {
                             e.printStackTrace();
                         }
 
-                        addPoi(46.76843,23.58898,response,userSessionManager.getUserDetails().get(KEY_EMAIL));
+                        addPoi(46.76843,23.58898,response,userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName);
                        // addPoi(46.76833,23.58923,response,userSessionManager.getUserDetails().get(KEY_EMAIL));
-                        String url = Constants.IS_CATEGORY_PRESENT+"/"+userSessionManager.getUserDetails().get(KEY_EMAIL)+"/"+categoryName;
-                        isCategoryPresent(url);
+                        //String url = Constants.IS_CATEGORY_PRESENT+"/"+userSessionManager.getUserDetails().get(KEY_EMAIL)+"/"+categoryName;
+                        //isCategoryPresent(url,46.76843,23.58898);
                         //addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
 //                        String poiName ="";
 //                        try {
@@ -197,10 +198,11 @@ public class PersistService extends Service {
         Log.e("==>", "DUPAAA");
     }
 
-    public void addPoi(double latitude, double longitude, JSONObject response, String username) {
+    public void addPoi(double latitude, double longitude, JSONObject response, String username, final String categoryName) {
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
+
 
         final JSONObject requestBody = new JSONObject();
 
@@ -227,6 +229,8 @@ public class PersistService extends Service {
                     public void onResponse(JSONObject response) {
                         {
                             Log.e("==>", response.toString());
+                            String url = Constants.IS_CATEGORY_PRESENT+"/"+userSessionManager.getUserDetails().get(KEY_EMAIL)+"/"+categoryName;
+                            isCategoryPresent(url,46.76843,23.58898);
                         }
                     }
                 },
@@ -254,7 +258,7 @@ public class PersistService extends Service {
         requestQueue.add(request);
     }
 
-    public void addTransaction(final String username, final String subcategory, double amount, String date, String message) {
+    public void addTransaction(final String username, final String subcategory, double amount, String date, String message, double latitude, double longitude) {
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -270,7 +274,7 @@ public class PersistService extends Service {
         }
 
 
-        String URL = Constants.ADD_TRANSACTION_TO_USER_URL+"/"+username+"/"+subcategory;
+        String URL = Constants.ADD_TRANSACTION_TO_USER_URL+"/"+username+"/"+subcategory+"/"+latitude+"/"+longitude;
 
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -369,7 +373,7 @@ public class PersistService extends Service {
         requestQueue.add(request);
     }
 
-    public void isCategoryPresent (String url) {
+    public void isCategoryPresent (String url, final double latitude, final double longitude) {
         RequestQueue queue = Volley.newRequestQueue(this);
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type","application/json");
@@ -391,6 +395,9 @@ public class PersistService extends Service {
                             intentAction.putExtra("amount", userTransaction.getAmount());
                             intentAction.putExtra("date",userTransaction.getDate());
                             intentAction.putExtra("message",userTransaction.getMessage());
+                            intentAction.putExtra("latitude", latitude);
+                            intentAction.putExtra("longitude", longitude);
+
 
                             PendingIntent newTransactionPendingIntent =
                                     PendingIntent.getBroadcast(getApplicationContext(), 0, intentAction, 0);
@@ -406,6 +413,7 @@ public class PersistService extends Service {
 
                             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
                             notificationManager.notify(2, mBuilder.build());
+                            //notificationManager.cancel(2);
 //                            builder = new AlertDialog.Builder(getApplicationContext());
 //                            builder.setTitle("Do you want the new category "+categoryName+"?" );
 //
@@ -431,7 +439,7 @@ public class PersistService extends Service {
 //                            builder.show();
                         }
                         else{
-                            addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
+                            addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage(),latitude,longitude);
                         }
                     }
                 }, new Response.ErrorListener() {

@@ -2,6 +2,7 @@ package com.example.stefao.smsreader.view.recommend;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.stefao.smsreader.R;
 import com.example.stefao.smsreader.utils.Constants;
 import com.example.stefao.smsreader.utils.VolleyUtils;
+import com.example.stefao.smsreader.view.transactions.TransactionsActivity;
 import com.example.stefao.smsreader.view.utils.CustomOnItemSelectedListener;
 import com.example.stefao.smsreader.viewmodel.recommend.RecommendViewModel;
 
@@ -89,7 +91,10 @@ public class RecommendActivity extends AppCompatActivity {
 
                 //recommendByCategory(String.valueOf(spinner1.getSelectedItem()));
                 //recommendByRating(String.valueOf(spinner1.getSelectedItem()));
-                recommendViewModel.recommendByRating(String.valueOf(spinner1.getSelectedItem()),mContext);
+                Intent intent = new Intent(mContext, RecommendationsActivity.class);
+                intent.putExtra("subcategory",String.valueOf(spinner1.getSelectedItem()));
+                startActivity(intent);
+                //recommendViewModel.recommendByRating(String.valueOf(spinner1.getSelectedItem()),mContext);
             }
 
         });

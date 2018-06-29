@@ -3,6 +3,7 @@ package com.example.stefao.smsreader.utils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -38,15 +39,18 @@ public class NewTransactionReceiver  extends BroadcastReceiver {
         double amount =intent.getDoubleExtra("amount",0);
         String date =intent.getStringExtra("date");
         String message =intent.getStringExtra("message");
-
-        addTransaction(username,categoryName,amount,date,message, context);
+        double latitude = intent.getDoubleExtra("latitude",0);
+        double longitude = intent.getDoubleExtra("longitude", 0);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.cancel(2);
+        addTransaction(username,categoryName,amount,date,message, context, latitude, longitude);
 
         //This is used to close the notification tray
         //Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         //context.sendBroadcast(it);
     }
 
-    public void addTransaction(final String username, final String subcategory, double amount, String date, String message, Context context) {
+    public void addTransaction(final String username, final String subcategory, double amount, String date, String message, Context context, final double latitude, final double longitude) {
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -62,7 +66,7 @@ public class NewTransactionReceiver  extends BroadcastReceiver {
         }
 
 
-        String URL = Constants.ADD_TRANSACTION_TO_USER_URL+"/"+username+"/"+subcategory;
+        String URL = Constants.ADD_TRANSACTION_TO_USER_URL+"/"+username+"/"+subcategory+"/"+latitude+"/"+longitude;
 
         final RequestQueue requestQueue = Volley.newRequestQueue(context);
 
