@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmsReader</string>
+    <string name="app_name">Budget Manager</string>
     <string name="action_settings">Settings</string>
     <string name="self_destruct">click me </string>
     <string name="recommend">Recommend POI </string>
@@ -30,11 +30,12 @@
     <string name="galleries_desc">I want to explore</string>
     <string name="poi">Points of interest</string>
     <string name="recommend_menu">Recommend me something</string>
-    <string name="recommend_menu_descr">Choose a category and see what it's best for you</string>
+    <string name="recommend_menu_descr">See what is best by category</string>
     <string name="position">Where am I?</string>
     <string name="poi_desc">I\'m hungry</string>
     <string name="settings">Settings</string>
     <string name="settings_desc">I\'ll do it myself</string>
+    <string name="menu">Menu</string>
 
     <string-array name="category_array">
         <item>subcategory1</item>

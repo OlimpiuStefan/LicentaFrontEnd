@@ -39,6 +39,7 @@ import java.util.Map;
 public class CategoriesViewModel {
 
     float expenses =0;
+    float categoryBudget=0;
     ProgressDialog pDialogFetch;
     JSONArray categoriesResponse = new JSONArray();
 //    MainActivity mainActivity = new MainActivity();
@@ -60,15 +61,38 @@ public class CategoriesViewModel {
 
                     @Override
                     public void onResponse(String response) {
+                        char[] responseChar = response.toCharArray();
+                        String expensesString="";
+                        String budgetString="";
+                        boolean comma = false;
+                        for (int i=1; i<responseChar.length; i++){
+                            if (responseChar[i]==','){
+                                comma = true;
+                            }
+                            else{
+                                if (responseChar[i]==']'){
+                                    break;
+                                }
+                                if (comma == false){
+                                    expensesString+=responseChar[i];
+                                }
+                                if (comma==true){
+                                    budgetString+=responseChar[i];
+                                }
+                            }
+                        }
 
-                        expenses = Float.parseFloat(response.toString());
+                        expenses = Float.parseFloat(budgetString);
+                        categoryBudget = Float.parseFloat(expensesString);
 
                         Log.e("expenses",String.valueOf(expenses));
                         if (expenses>0) {
-                            holder.progressBar.setProgress(Math.round(expenses));
+                            holder.progressBar.setProgress(Math.round(expenses*100/categoryBudget));
+                            holder.progressBar.setText(Math.round(expenses*100/categoryBudget)+"%");
                         }
                         else{
                             holder.progressBar.setProgress(0);
+                            holder.progressBar.setText("0%");
                         }
                     }
                 }, new Response.ErrorListener() {

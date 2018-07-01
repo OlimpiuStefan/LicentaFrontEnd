@@ -1,24 +1,42 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.stefao.smsreader.view.feedback.FeedbackActivity"
+    android:background="#fcfcfc">
+
+    <TableLayout
+        android:id="@+id/LinearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
     <Spinner
         android:id="@+id/spinnerFeedback1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/feedback_array"
-        android:prompt="@string/feedback_prompt" />
+        android:prompt="@string/feedback_prompt"
+        android:layout_marginRight="100dp"
+        android:layout_marginLeft="100dp"/>
 
     <Spinner
         android:id="@+id/spinnerFeedback2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginRight="100dp"
+        android:layout_marginLeft="100dp"/>
 
     <Button
         android:id="@+id/btnSubmitFeedback"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit" />
+        android:text="Submit"
+        android:layout_marginRight="100dp"
+        android:layout_marginLeft="100dp"/>
+        </TableLayout>
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

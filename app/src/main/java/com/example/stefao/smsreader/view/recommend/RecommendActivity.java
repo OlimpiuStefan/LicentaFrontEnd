@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -68,6 +69,10 @@ public class RecommendActivity extends AppCompatActivity {
 
     public void addListenerOnSpinnerItemSelection() {
         spinner1 = (Spinner) findViewById(R.id.spinner1);
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+//                R.array.travelreasons, R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+//        spinner.setAdapter(adapter);
         spinner1.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
 
@@ -100,96 +105,4 @@ public class RecommendActivity extends AppCompatActivity {
         });
     }
 
-    public void recommendByCategory(String subcategory) {
-
-        final Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json");
-
-        String URL = Constants.RECOMMEND_BY_FREQUENCY+"/"+subcategory;
-
-        final RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET,
-                URL,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        {
-                            Toast.makeText(mActivity,
-                                    "poiul recomandat este"+response,
-                                    Toast.LENGTH_SHORT).show();
-                            Log.e("====>",response.toString());
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (error instanceof NoConnectionError) {
-                            VolleyUtils.buildAlertDialog(Constants.ERROR_TITLE, Constants.NO_CONNECTION, getApplicationContext());
-                        } else {
-                            if (error.networkResponse != null) {
-                                int statusCode = error.networkResponse.statusCode;
-                                if (statusCode >= 500) {
-                                    VolleyUtils.buildAlertDialog(Constants.ERROR_TITLE, Constants.SERVER_DOWN, getApplicationContext());
-                                }
-                            }
-                        }
-                    }
-                }
-        ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return headers;
-            }
-        };
-        requestQueue.add(request);
-    }
-
-    public void recommendByRating(String subcategory) {
-
-        final Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json");
-
-
-//        final JSONObject requestBody = new JSONObject();
-//
-//        try {
-//            requestBody.put("subcategory", subcategory);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-
-
-        String URL = Constants.RECOMMEND_BY_RATING+"/"+subcategory;
-
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                (Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
-
-                    @Override
-                    public void onResponse(JSONArray response) {
-
-                        Log.e("rating", response.toString());
-
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        ((TextView) findViewById(R.id.text_view_id)).setText("try again");
-                        Log.e("==>", "EROAREEEEEE");
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return headers;
-            }
-        };
-        requestQueue.add(jsonArrayRequest);
-    }
 }

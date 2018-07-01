@@ -74,8 +74,8 @@ public class RecommendationsActivity extends AppCompatActivity {
 
         userSessionManager = new UserSessionManager(this);
         listViewPoiFrequency = (ListView) findViewById(R.id.poi_frequency_list);
-        //ViewGroup headerView = (ViewGroup)getLayoutInflater().inflate(R.layout.transactions_header, listViewPoiFrequency,false);
-        //listViewPoiFrequency.addHeaderView(headerView);
+        ViewGroup headerViewFreqeuncy = (ViewGroup)getLayoutInflater().inflate(R.layout.poi_frequency_header, listViewPoiFrequency,false);
+        listViewPoiFrequency.addHeaderView(headerViewFreqeuncy);
         ArrayList<PoiDTO> poiArray = new Gson().fromJson(poiFrequencyResponse.toString(), new TypeToken<List<PoiDTO>>(){}.getType());
         poiFrequencyAdapter = new PoiFrequencyAdapter(this,poiArray);
         listViewPoiFrequency.setAdapter(poiFrequencyAdapter);
@@ -84,8 +84,8 @@ public class RecommendationsActivity extends AppCompatActivity {
 
 
         listViewPoiRating = (ListView) findViewById(R.id.poi_rating_list);
-        //ViewGroup headerView = (ViewGroup)getLayoutInflater().inflate(R.layout.transactions_header, listViewPoiFrequency,false);
-        //listViewPoiFrequency.addHeaderView(headerView);
+        ViewGroup headerViewRating = (ViewGroup)getLayoutInflater().inflate(R.layout.poi_rating_header, listViewPoiRating,false);
+        listViewPoiRating.addHeaderView(headerViewRating);
         ArrayList<PoiDTO> poiArray2 = new Gson().fromJson(poiRatingResponse.toString(), new TypeToken<List<PoiDTO>>(){}.getType());
         poiRatingAdapter = new PoiRatingAdapter(this,poiArray2);
         listViewPoiRating.setAdapter(poiRatingAdapter);

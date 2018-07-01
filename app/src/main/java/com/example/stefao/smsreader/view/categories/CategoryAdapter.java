@@ -1,6 +1,8 @@
 package com.example.stefao.smsreader.view.categories;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -23,6 +25,7 @@ import com.example.stefao.smsreader.R;
 import com.example.stefao.smsreader.model.CategoryDTO;
 import com.example.stefao.smsreader.utils.Constants;
 import com.example.stefao.smsreader.utils.UserSessionManager;
+import com.example.stefao.smsreader.view.utils.TextProgressBar;
 import com.example.stefao.smsreader.viewmodel.categories.CategoriesViewModel;
 
 import java.util.ArrayList;
@@ -52,7 +55,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryDTO> {
     public static class ViewHolder {
         public TextView nameTextView;
         public Button buttonSetBudget;
-        public ProgressBar progressBar;
+        public TextProgressBar progressBar;
 
     }
 
@@ -74,7 +77,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryDTO> {
         //TextView name = (TextView) listItem.findViewById(R.id.textView_name);
         //Button setBudgetButton = (Button) listItem.findViewById(R.id.button_setBudget);
         viewHolder.buttonSetBudget = (Button) listItem.findViewById(R.id.button_setBudget);
-        viewHolder.progressBar = (ProgressBar) listItem.findViewById(R.id.determinateBar);
+        viewHolder.progressBar = (TextProgressBar) listItem.findViewById(R.id.determinateBar);
         listItem.setTag(viewHolder);
 
         ViewHolder holder = (ViewHolder) listItem.getTag();
@@ -86,8 +89,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryDTO> {
         float expenses = categoriesViewModel.getExpensesByCategory(URL,holder,mContext);
        // holder.progressBar.setProgress(Math.round(expenses));
         holder.progressBar.setMax(100);
-
-
+        //holder.progressBar.getProgressDrawable().setColorFilter(Color.BLUE, PorterDuff.Mode.OVERLAY);
 
         return listItem;
     }

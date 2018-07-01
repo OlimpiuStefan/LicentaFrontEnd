@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.stefao.smsreader.view.dashboard.DashboardActivity"
-    android:background="#fcfcfc">
+    >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -18,17 +18,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
-            app:contentScrim="?attr/colorPrimary"
-            app:title="Guide me"
-            app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp">
+            app:contentScrim="@color/black"
+            app:title="Budget manager"
+            app:expandedTitleMarginStart="8dp"
+            app:expandedTitleMarginEnd="94dp">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_collapseMode="pin"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"/>
+                android:layout_height="?attr/actionBarSize"
+                android:background="#363232"
+                android:textColor="@android:color/white"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -37,16 +39,18 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="@drawable/wallet">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="10dp"
-            android:background="#fcfcfc"
+            android:background="#C0000000"
             android:gravity="center"
-            android:id="@+id/ll">
+            android:id="@+id/ll"
+            >
             <LinearLayout
                 android:clipToPadding="false"
                 android:gravity="center"
@@ -64,18 +68,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:background="#1FDB84">
                         <ImageView
                             android:layout_width="64dp"
                             android:layout_height="64dp"
-
+                            android:background="@drawable/categories"
                             android:padding="10dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
                             android:layout_marginTop="10dp"
-                            android:text="@string/categories"/>
+                            android:text="@string/categories"
+                            android:textColor="@android:color/white"/>
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
@@ -87,7 +93,7 @@
                             android:gravity="center"
                             android:text="@string/galleries_desc"
                             android:padding="5dp"
-                            android:textColor="@android:color/darker_gray"/>
+                            android:textColor="@android:color/white"/>
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
@@ -102,17 +108,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:background="#1FDB84">
                         <ImageView
                             android:layout_width="64dp"
                             android:layout_height="64dp"
-                            android:padding="10dp"/>
+                            android:padding="10dp"
+                            android:background="@drawable/recommendations"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
                             android:layout_marginTop="10dp"
-                            android:text="@string/recommend_menu"/>
+                            android:text="@string/recommend_menu"
+                            android:textColor="@android:color/white"/>
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
@@ -124,7 +133,7 @@
                             android:gravity="center"
                             android:text="@string/recommend_menu_descr"
                             android:padding="5dp"
-                            android:textColor="@android:color/darker_gray"/>
+                            android:textColor="@android:color/white"/>
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
@@ -139,7 +148,7 @@
                 <android.support.v7.widget.CardView
                     android:foreground="?android:attr/selectableItemBackground"
                     android:clickable="true"
-                    android:id="@+id/poiId"
+                    android:id="@+id/poiCardView"
                     android:layout_width="160dp"
                     android:layout_height="190dp"
                     android:layout_margin="10dp">
@@ -147,17 +156,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:background="#1FDB84">
                         <ImageView
                             android:layout_width="64dp"
                             android:layout_height="64dp"
-                            android:padding="10dp"/>
+                            android:padding="10dp"
+                            android:background="@drawable/poi"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
                             android:layout_marginTop="10dp"
-                            android:text="@string/poi"/>
+                            android:text="@string/poi"
+                            android:textColor="@android:color/white"/>
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
@@ -167,9 +179,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/poi_desc"
+                            android:text="See what you have visited"
                             android:padding="5dp"
-                            android:textColor="@android:color/darker_gray"/>
+                            android:textColor="@android:color/white"/>
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
@@ -185,19 +197,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:background="#1FDB84">
 
                         <ImageView
                             android:layout_width="64dp"
                             android:layout_height="64dp"
-                            android:padding="10dp"/>
+                            android:padding="10dp"
+                            android:background="@drawable/settings"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:text="@string/settings"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textColor="@android:color/white"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -211,7 +226,7 @@
                             android:gravity="center"
                             android:padding="5dp"
                             android:text="@string/settings_desc"
-                            android:textColor="@android:color/darker_gray" />
+                            android:textColor="@android:color/white"/>
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
@@ -234,17 +249,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:background="#1FDB84">
                         <ImageView
                             android:layout_width="64dp"
                             android:layout_height="64dp"
-                            android:padding="10dp"/>
+                            android:padding="10dp"
+                            android:background="@drawable/logout"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
                             android:layout_marginTop="10dp"
-                            android:text="@string/logout"/>
+                            android:text="@string/logout"
+                            android:textColor="@android:color/white"/>
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
@@ -256,7 +274,7 @@
                             android:gravity="center"
                             android:text="@string/logout_desc"
                             android:padding="5dp"
-                            android:textColor="@android:color/darker_gray"/>
+                            android:textColor="@android:color/white"/>
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>

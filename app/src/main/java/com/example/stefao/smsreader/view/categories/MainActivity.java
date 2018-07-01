@@ -10,10 +10,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
+
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +28,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -107,23 +116,36 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     //private Button btnSubmit;
     private Button setBudgetBtn;
     CategoriesViewModel categoriesViewModel;
+    private android.support.design.widget.CoordinatorLayout backgroundColor;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mContext=this;
         mActivity=this;
+//        backgroundColor = (android.support.design.widget.CoordinatorLayout) findViewById(R.id.categories_layout);
+//        backgroundColor.setBackgroundColor(getColorWithAlpha(Color.GREEN, 0.9f));
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.RECEIVE_SMS},
                 MY_PERMISSIONS_REQUEST_SMS_RECEIVE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.BLACK);
+        }
         super.onCreate(savedInstanceState);
         //locationUtils = new LocationUtils(this, this);
         //userLocation = new UserLocation();
         categoriesViewModel = new CategoriesViewModel();
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.action_toolbar);
+        setSupportActionBar(myToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+
+
 
 
 //        SmsReceiver.bindListener(new SmsListener() {
@@ -144,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
         userSessionManager = new UserSessionManager(this);
         listview = (ListView) findViewById(R.id.categories_list);
+        ViewGroup headerView = (ViewGroup)getLayoutInflater().inflate(R.layout.category_header, listview,false);
+        listview.addHeaderView(headerView);
         Log.e("==>",userSessionManager.getUserDetails().get(KEY_EMAIL));
         //getCategories(Constants.BASE_URL+Constants.GET_CATEGORIES_URL+userSessionManager.getUserDetails().get(KEY_EMAIL));
 
@@ -163,21 +187,21 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             }
         });
 
-        poiListView = (ListView) findViewById(R.id.pois_list);
-        getPoisForLoggedUser(Constants.BASE_URL+Constants.GET_POIS_FOR_LOGGED_USER_URL+userSessionManager.getUserDetails().get(KEY_EMAIL));
-        Log.e("==>>>>",poisResponse.toString());
-        ArrayList<PoiDTO> poiArray = new Gson().fromJson(poisResponse.toString(), new TypeToken<List<PoiDTO>>(){}.getType());
-        poiAdapter = new PoiAdapter(this,poiArray);
-        poiListView.setAdapter(poiAdapter);
-        poiListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                PoiDTO item = (PoiDTO)parent.getItemAtPosition(position);
-                Intent intent = new Intent(mContext,FeedbackActivity.class);
-                intent.putExtra("PoiDTO",item);
-                startActivity(intent);
-            }
-        });
+//        poiListView = (ListView) findViewById(R.id.pois_list);
+//        getPoisForLoggedUser(Constants.BASE_URL+Constants.GET_POIS_FOR_LOGGED_USER_URL+userSessionManager.getUserDetails().get(KEY_EMAIL));
+//        Log.e("==>>>>",poisResponse.toString());
+//        ArrayList<PoiDTO> poiArray = new Gson().fromJson(poisResponse.toString(), new TypeToken<List<PoiDTO>>(){}.getType());
+//        poiAdapter = new PoiAdapter(this,poiArray);
+//        poiListView.setAdapter(poiAdapter);
+//        poiListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                PoiDTO item = (PoiDTO)parent.getItemAtPosition(position);
+//                Intent intent = new Intent(mContext,FeedbackActivity.class);
+//                intent.putExtra("PoiDTO",item);
+//                startActivity(intent);
+//            }
+//        });
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         adapter.add("Item1");
@@ -203,6 +227,16 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         ButterKnife.bind(this);
         //addListenerOnButtonSetBudget();
 
+    }
+
+    public static int getColorWithAlpha(int color, float ratio) {
+        int newColor = 0;
+        int alpha = Math.round(Color.alpha(color) * ratio);
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+        newColor = Color.argb(alpha, r, g, b);
+        return newColor;
     }
 
 //    public void addListenerOnButtonSetBudget() {

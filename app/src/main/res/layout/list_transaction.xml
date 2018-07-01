@@ -9,8 +9,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textAlignment="center"/>
 
     <TextView
         android:id="@+id/textView_amount"
@@ -19,8 +21,10 @@
         android:layout_toRightOf="@id/textView_date"
         android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textAlignment="center"/>
 
     <TextView
         android:id="@+id/textView_poi"
@@ -28,9 +32,11 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/textView_amount"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:layout_margin="20dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textAlignment="center"/>
 
 
 

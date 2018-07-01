@@ -2,59 +2,69 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight">
+    <!--android:background="#1FDB84"-->
+
 
 
     <TextView
         android:id="@+id/textView_name"
         android:layout_width="100dp"
         android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="6dip"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="6dip"/>
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/white"/>
 
-    <ProgressBar
+
+    <com.example.stefao.smsreader.view.utils.TextProgressBar
         android:id="@+id/determinateBar"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="fill_parent"
         android:layout_height="26dip"
 
-        android:layout_toRightOf="@id/textView_name"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/textView_name"
 
+        android:ellipsize="marquee"
         android:singleLine="true"
-        android:ellipsize="marquee"/>
+        android:progressTint="#197632"
+        android:progressBackgroundTint="#1FDB84"        />
+
 
     <!--<TextView-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/textview_Expenses"-->
-        <!--android:layout_toRightOf="@id/textView_name"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_above="@id/determinateBar"-->
-        <!--android:layout_alignWithParentIfMissing="true"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:id="@+id/textview_Expenses"-->
+    <!--android:layout_toRightOf="@id/textView_name"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:layout_above="@id/determinateBar"-->
+    <!--android:layout_alignWithParentIfMissing="true"-->
 
-        <!--android:gravity="center_vertical"-->
-        <!--android:text="My Application"/>-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:text="My Application"/>-->
 
     <Button
+        android:id="@+id/button_setBudget"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button_setBudget"
-        android:layout_toRightOf="@id/textView_name"
+        android:layout_above="@id/determinateBar"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_above="@id/determinateBar"
         android:layout_alignWithParentIfMissing="true"
+        android:layout_toRightOf="@id/textView_name"
         android:focusable="false"
         android:gravity="center_vertical"
         android:onClick="clickedSetBudget"
-        android:text="set budget"/>
-
-
-
+        android:text="set budget"
+        android:background="#363232"
+        android:textColor="@color/white"
+        android:textAlignment="center"/>
 
 
 </RelativeLayout>

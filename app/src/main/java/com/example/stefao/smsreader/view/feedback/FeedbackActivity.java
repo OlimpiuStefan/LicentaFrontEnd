@@ -67,9 +67,10 @@ public class FeedbackActivity extends AppCompatActivity {
         spinner2 = (Spinner) findViewById(R.id.spinnerFeedback2);
         List<String> list = new ArrayList<String>();
         list.add("bad");
-        list.add("not bad");
+        list.add("notbad");
         list.add("good");
-        list.add("very good");
+        list.add("verygood");
+        list.add("verybad");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

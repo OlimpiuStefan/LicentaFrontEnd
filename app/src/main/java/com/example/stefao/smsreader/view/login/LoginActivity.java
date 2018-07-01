@@ -6,9 +6,15 @@ package com.example.stefao.smsreader.view.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 
@@ -34,10 +40,25 @@ public class LoginActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.BLACK);
+        }
         loginViewModel = new LoginViewModel();
         session = new UserSessionManager(getApplicationContext());
         ButterKnife.bind(this);
+        userCredentials.get(0).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    userCredentials.get(0).setHintTextColor((Color.parseColor("#1FDB84")));
+                } else {
+                    // set which color you want when edittext is focused
+                }
+            }});
     }
+
 
     @OnClick(R.id.link_signup)
     public void goToRegisterActivity() {

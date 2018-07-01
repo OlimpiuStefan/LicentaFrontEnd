@@ -1,5 +1,6 @@
 package com.example.stefao.smsreader.viewmodel.recommend;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ public class RecommendViewModel {
 
     JSONArray poiFrequencyResponse = new JSONArray();
     JSONArray poiRatingResponse = new JSONArray();
+    ProgressDialog pDialog;
 
     public RecommendViewModel(){};
 
@@ -52,7 +54,11 @@ public class RecommendViewModel {
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
-
+        pDialog = new ProgressDialog(mContext);
+        pDialog.setTitle("Getting your recommendations");
+        pDialog.setMessage("Please wait...");
+        pDialog.setCancelable(false);
+        pDialog.show();
 
         String URL = Constants.RECOMMEND_BY_RATING+"/"+subcategory;
 
@@ -71,6 +77,7 @@ public class RecommendViewModel {
                         poiRatingAdapter.clear();
                         poiRatingAdapter.addAll(transactionsArray);
                         poiRatingAdapter.notifyDataSetChanged();
+                        pDialog.hide();
 
                     }
                 }, new Response.ErrorListener() {
@@ -80,6 +87,7 @@ public class RecommendViewModel {
                         error.printStackTrace();
                         //((TextView) findViewById(R.id.text_view_id)).setText("try again");
                         Log.e("==>", "EROAREEEEEE");
+                        pDialog.hide();
                     }
                 }) {
             @Override
