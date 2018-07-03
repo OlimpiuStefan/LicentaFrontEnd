@@ -19,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +50,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.stefao.smsreader.view.feedback.FeedbackActivity;
+import com.example.stefao.smsreader.view.recommend.RecommendActivity;
+import com.example.stefao.smsreader.view.settings.SettingsActivity;
 import com.example.stefao.smsreader.view.utils.MultiSpinner;
 import com.example.stefao.smsreader.R;
 import com.example.stefao.smsreader.view.transactions.TransactionsActivity;
@@ -99,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     Context mContext;
     Activity mActivity;
     private PersistService persistService;
+    SwipeRefreshLayout swipeRefreshLayout;
+    SwipeRefreshLayout swipeRefreshLayoutNewCat;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 
         @Override
@@ -144,6 +149,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+
+
 
 
 
@@ -204,12 +211,13 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 //        });
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-        adapter.add("Item1");
-        adapter.add("Item2");
-        adapter.add("Item3");
-        adapter.add("Item4");
-        adapter.add("Item5");
+        adapter.add("cafe");
+        adapter.add("books");
+        adapter.add("restaurant");
+        adapter.add("supermarket");
+        adapter.add("nightclub");
         adapter.add("clothes");
+        adapter.add("fuel");
 
         // get spinnerSelectInitialCategories and set adapter
         spinnerSelectInitialCategories = (MultiSpinner) findViewById(R.id.spinnerMulti);
@@ -220,6 +228,41 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         boolean[] selectedItems = new boolean[adapter.getCount()];
         selectedItems[1] = true; // select second item
         spinnerSelectInitialCategories.setSelected(selectedItems);
+
+
+        swipeRefreshLayout = findViewById(R.id.swiperefreshcat);
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        //Intent i = new Intent(getApplicationContext(), TransactionsActivity.class);
+                        //startActivity(i);
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+                    }
+                }
+        );
+
+//        swipeRefreshLayoutNewCat = findViewById(R.id.swiperefreshnewcat);
+//        swipeRefreshLayoutNewCat.setOnRefreshListener(
+//                new SwipeRefreshLayout.OnRefreshListener() {
+//                    @Override
+//                    public void onRefresh() {
+//
+//                        // This method performs the actual data-refresh operation.
+//                        // The method calls setRefreshing(false) when it's finished.
+//                        //Intent i = new Intent(getApplicationContext(), TransactionsActivity.class);
+//                        //startActivity(i);
+//                        Intent intent = getIntent();
+//                        finish();
+//                        startActivity(intent);
+//                    }
+//                }
+//        );
 
         //addItemsOnSpinner2();
         //addListenerOnButton();
@@ -372,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public void onServiceConnected(ComponentName name, IBinder binder) {
         PersistService.MyBinder b = (PersistService.MyBinder) binder;
         persistService = b.getService();
-        Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -396,7 +439,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
@@ -826,7 +870,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
-                        ((TextView) findViewById(R.id.text_view_id)).setText("try again");
+//                        ((TextView) findViewById(R.id.text_view_id)).setText("try again");
                         Log.e("==>", "EROAREEEEEE");
                         //pDialogFetch.hide();
                     }

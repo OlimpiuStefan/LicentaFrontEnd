@@ -62,9 +62,10 @@
         android:gravity="center_vertical"
         android:onClick="clickedSetBudget"
         android:text="set budget"
-        android:background="#363232"
+        android:background="@drawable/mybutonn"
         android:textColor="@color/white"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        />
 
 
 </RelativeLayout>

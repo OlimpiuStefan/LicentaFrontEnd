@@ -17,10 +17,10 @@
             android:layout_span="2"
             android:text="Give your visited places a feedback"
             android:textStyle="bold"
-            android:background="#c0c0c0">
+            android:textSize="20sp"
+            android:textColor="@color/white">
         </TextView>
     </TableRow>
-
 
 </TableLayout>
 

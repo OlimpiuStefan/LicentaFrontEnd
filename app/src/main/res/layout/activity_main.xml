@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/categories_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/categories_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.stefao.smsreader.view.categories.MainActivity"
-    android:background="@drawable/wallet">
+    android:background="@drawable/wallet3"
+    tools:context="com.example.stefao.smsreader.view.categories.MainActivity">
     <!--android:background="#C0000000">-->
 
     <!--<include layout="@layout/content_main" />-->
@@ -28,8 +28,8 @@
 
 
     <android.support.design.widget.AppBarLayout
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -49,34 +49,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#C0000000"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:id="@+id/LinearLayout1"
+
+
+        <!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:fillViewport="true">-->
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefreshcat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <TextView
-                android:id="@+id/text_view_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <!--<Button-->
-            <!--android:id="@+id/button_id"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="48dp"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:text="@string/self_destruct"-->
-            <!--tools:layout_editor_absoluteY="82dp" />-->
-        </LinearLayout>
-
-        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="true">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,30 +75,48 @@
                 <!--android:gravity="center_vertical"-->
                 <!--android:text="The categories with budget" />-->
 
+
+
                 <ListView
                     android:id="@+id/categories_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="visible" />
 
+            </LinearLayout>
+        <!--</ScrollView>-->
+
+
+
+
+            <LinearLayout
+                android:id="@+id/LinearLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <!--<android.support.v4.widget.SwipeRefreshLayout-->
+                    <!--android:id="@+id/swiperefreshnewcat"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent">-->
+
+                <com.example.stefao.smsreader.view.utils.MultiSpinner
+                    android:id="@+id/spinnerMulti"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginRight="100dp"
+                    android:background="#1FDB84"
+                    android:visibility="gone" />
+
+                <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+
 
             </LinearLayout>
-        </ScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-        <LinearLayout
-            android:id="@+id/LinearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
 
-            <com.example.stefao.smsreader.view.utils.MultiSpinner
-                android:id="@+id/spinnerMulti"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
-
-        </LinearLayout>
 
         <!--<LinearLayout-->
         <!--android:id="@+id/LinearLayout4"-->

@@ -1,7 +1,10 @@
 package com.example.stefao.smsreader.viewmodel.feedback;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NoConnectionError;
@@ -27,6 +30,7 @@ import java.util.Map;
 public class FeedbackViewModel {
 
     public FeedbackViewModel(){}
+
 
     public void addPoiRatingToPoi(String name, final Context context, String price, String quality, String accesibility, String amability) {
 
@@ -58,6 +62,8 @@ public class FeedbackViewModel {
                     public void onResponse(JSONObject response) {
                         {
                             Log.e("==>", response.toString());
+                            Toast.makeText(context,"Successfully added rating",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 },

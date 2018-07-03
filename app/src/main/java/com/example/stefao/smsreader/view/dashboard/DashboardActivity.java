@@ -16,6 +16,7 @@ import com.example.stefao.smsreader.view.feedback.PoisActivity;
 import com.example.stefao.smsreader.view.recommend.RecommendActivity;
 import com.example.stefao.smsreader.utils.UserSessionManager;
 import com.example.stefao.smsreader.view.categories.MainActivity;
+import com.example.stefao.smsreader.view.settings.SettingsActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -76,6 +77,12 @@ public class DashboardActivity extends AppCompatActivity {
     @OnClick(R.id.poiCardView)
     public void goToPoisActivity() {
         Intent i = new Intent(getApplicationContext(), PoisActivity.class);
+        startActivity(i);
+    }
+
+    @OnClick(R.id.settingsId)
+    public void goToSettingsActivity() {
+        Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
         startActivity(i);
     }
 

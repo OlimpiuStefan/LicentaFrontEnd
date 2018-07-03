@@ -1,42 +1,69 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.stefao.smsreader.view.feedback.FeedbackActivity"
-    android:background="#fcfcfc">
+    android:background="@drawable/wallet3"
+    tools:context="com.example.stefao.smsreader.view.feedback.FeedbackActivity">
 
-    <TableLayout
-        android:id="@+id/LinearLayout4"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/action_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        <!--</android.support.design.widget.CoordinatorLayout>-->
+
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:background="#C0000000"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <Spinner
-        android:id="@+id/spinnerFeedback1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/feedback_array"
-        android:prompt="@string/feedback_prompt"
-        android:layout_marginRight="100dp"
-        android:layout_marginLeft="100dp"/>
+        <TableLayout
+            android:id="@+id/LinearLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
 
-    <Spinner
-        android:id="@+id/spinnerFeedback2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="100dp"
-        android:layout_marginLeft="100dp"/>
+            <Spinner
+                android:id="@+id/spinnerFeedback1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_marginRight="100dp"
+                android:entries="@array/feedback_array"
+                android:background="#1FDB84"
+                android:prompt="@string/feedback_prompt" />
 
-    <Button
-        android:id="@+id/btnSubmitFeedback"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit"
-        android:layout_marginRight="100dp"
-        android:layout_marginLeft="100dp"/>
+            <Spinner
+                android:id="@+id/spinnerFeedback2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:background="#1FDB84"
+                android:layout_marginRight="100dp" />
+
+            <Button
+                android:id="@+id/btnSubmitFeedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_marginRight="100dp"
+                android:background="@drawable/mybutonn"
+                android:text="Submit" />
         </TableLayout>
+
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

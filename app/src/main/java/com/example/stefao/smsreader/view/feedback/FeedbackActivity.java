@@ -2,10 +2,18 @@ package com.example.stefao.smsreader.view.feedback;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,6 +60,16 @@ public class FeedbackActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.BLACK);
+        }
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.action_toolbar);
+        setSupportActionBar(myToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         mActivity=this;
         clickedPoi = (PoiDTO)getIntent().getExtras().get("PoiDTO");
         addItemsOnSpinner2();
@@ -65,6 +83,7 @@ public class FeedbackActivity extends AppCompatActivity {
     public void addItemsOnSpinner2() {
 
         spinner2 = (Spinner) findViewById(R.id.spinnerFeedback2);
+
         List<String> list = new ArrayList<String>();
         list.add("bad");
         list.add("notbad");
@@ -113,10 +132,7 @@ public class FeedbackActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(mActivity,
-                        "OnClickListener : " +
-                                "\nSpinner 1 : "+ String.valueOf(spinner1.getSelectedItem()) +
-                                "\nSpinner 2 : "+ String.valueOf(spinner2.getSelectedItem()),
+                Toast.makeText(mActivity,"Successfully added rating",
                         Toast.LENGTH_SHORT).show();
                 Log.e("poi",poiRating.toString());
                 Log.e("poi",clickedPoi.toString());

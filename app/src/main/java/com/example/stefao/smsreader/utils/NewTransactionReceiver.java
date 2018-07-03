@@ -78,7 +78,7 @@ public class NewTransactionReceiver  extends BroadcastReceiver {
                     @Override
                     public void onResponse(JSONObject response) {
                         {
-                            Log.e("==>", response.toString());
+                            //Log.e("==>", response.toString());
                             String url = Constants.GET_USER_CATEGORY_BUDGET_URL+"/"+subcategory+"/"+username;
                             //getUserCategoryBudget(url);
 
@@ -88,7 +88,7 @@ public class NewTransactionReceiver  extends BroadcastReceiver {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Log.e("error",error.toString());
                     }
                 }
         ) {

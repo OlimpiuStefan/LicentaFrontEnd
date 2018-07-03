@@ -36,7 +36,7 @@ public class TransactionsViewModel {
 
     JSONArray transactionsResponse = new JSONArray();
 
-    ProgressDialog pDialogFetch;
+    ProgressDialog pDialogFetch ;
 
     public TransactionsViewModel() {
     }
@@ -47,6 +47,11 @@ public class TransactionsViewModel {
         RequestQueue queue = Volley.newRequestQueue(context);
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
+        pDialogFetch = new ProgressDialog(context);
+        pDialogFetch.setTitle("Fetching your transactions");
+        pDialogFetch.setMessage("Please wait...");
+        pDialogFetch.setCancelable(false);
+        pDialogFetch.show();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -61,6 +66,7 @@ public class TransactionsViewModel {
                         transactionAdapter.clear();
                         transactionAdapter.addAll(transactionsArray);
                         transactionAdapter.notifyDataSetChanged();
+                        pDialogFetch.hide();
 
                     }
                 }, new Response.ErrorListener() {
@@ -70,6 +76,7 @@ public class TransactionsViewModel {
                         error.printStackTrace();
                         //((TextView) findViewById(R.id.text_view_id)).setText("try again");
                         Log.e("==>", "EROAREEEEEE");
+                        pDialogFetch.hide();
                     }
                 }) {
             @Override
@@ -86,11 +93,7 @@ public class TransactionsViewModel {
         RequestQueue queue = Volley.newRequestQueue(mContext);
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
-        pDialogFetch = new ProgressDialog(mContext);
-        pDialogFetch.setTitle("Fetching your transactions");
-        pDialogFetch.setMessage("Please wait...");
-        pDialogFetch.setCancelable(false);
-        pDialogFetch.show();
+
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -102,8 +105,8 @@ public class TransactionsViewModel {
                         PoiDTO poiDTO = new Gson().fromJson(response.toString(), new TypeToken<PoiDTO>() {
                         }.getType());
                         holder.nameTextView.setText(poiDTO.getName());
-                        pDialogFetch.hide();
-                        pDialogFetch.cancel();
+                        //pDialogFetch.hide();
+                        //pDialogFetch.cancel();
                     }
                 }, new Response.ErrorListener() {
 
@@ -112,7 +115,7 @@ public class TransactionsViewModel {
                         error.printStackTrace();
                         Log.e("==>", "EROAREEEEEE");
                         //pDialogFetch.hide();
-                        pDialogFetch.hide();
+                        //pDialogFetch.hide();
                     }
                 }) {
             @Override

@@ -17,8 +17,9 @@
             android:layout_span="2"
             android:text="Date"
             android:textStyle="bold"
-            android:background="#c0c0c0"
+            android:textSize="18sp"
             android:textAlignment="center"
+            android:textColor="@color/white"
             >
         </TextView>
         <TextView
@@ -27,8 +28,9 @@
             android:gravity="center"
             android:text="Amount"
             android:textStyle="bold"
-            android:background="#c0c0c0"
             android:textAlignment="center"
+            android:textSize="19sp"
+            android:textColor="@color/white"
             >
         </TextView>
         <TextView
@@ -37,8 +39,9 @@
             android:gravity="center"
             android:text="Place"
             android:textStyle="bold"
-            android:background="#c0c0c0"
             android:textAlignment="center"
+            android:textSize="20sp"
+            android:textColor="@color/white"
             >
         </TextView>
     </TableRow>

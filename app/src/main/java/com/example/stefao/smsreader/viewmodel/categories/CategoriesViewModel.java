@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -111,7 +112,7 @@ public class CategoriesViewModel {
         return expenses;
     }
 
-    public void getCategories(String url, Context context, final ListView listview, final MultiSpinner spinnerSelectInitialCategories, final CategoryAdapter categoryAdapter ) {
+    public void getCategories(String url, final Context context, final ListView listview, final MultiSpinner spinnerSelectInitialCategories, final CategoryAdapter categoryAdapter ) {
         //String url = "https://rocky-wave-99733.herokuapp.com/demo";
         Log.d("==>", "INAINTEEEEEE");
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -137,6 +138,8 @@ public class CategoriesViewModel {
                         if (categoriesArray.size()==0){
                             listview.setVisibility(View.GONE);
                             spinnerSelectInitialCategories.setVisibility(View.VISIBLE);
+                            Toast.makeText(context,"Choose your first categories",
+                                    Toast.LENGTH_LONG).show();
                         }
                         categoryAdapter.clear();
                         categoryAdapter.addAll(categoriesArray);

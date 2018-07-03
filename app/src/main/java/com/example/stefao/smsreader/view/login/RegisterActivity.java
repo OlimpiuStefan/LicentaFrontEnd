@@ -2,8 +2,12 @@ package com.example.stefao.smsreader.view.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.example.stefao.smsreader.R;
@@ -36,6 +40,11 @@ public class RegisterActivity extends AppCompatActivity {
         session = new UserSessionManager(getApplicationContext());
         ButterKnife.bind(this);
         loginViewModel = new LoginViewModel();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.BLACK);
+        }
     }
 
     @OnClick(R.id.link_login)

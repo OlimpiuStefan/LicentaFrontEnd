@@ -168,8 +168,8 @@ public class PersistService extends Service {
 
                         addPoi(46.76843,23.58898,response,userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName);
                        // addPoi(46.76833,23.58923,response,userSessionManager.getUserDetails().get(KEY_EMAIL));
-                        //String url = Constants.IS_CATEGORY_PRESENT+"/"+userSessionManager.getUserDetails().get(KEY_EMAIL)+"/"+categoryName;
-                        //isCategoryPresent(url,46.76843,23.58898);
+                        String url = Constants.IS_CATEGORY_PRESENT+"/"+userSessionManager.getUserDetails().get(KEY_EMAIL)+"/"+categoryName;
+                        isCategoryPresent(url,46.76843,23.58898);
                         //addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
 //                        String poiName ="";
 //                        try {
@@ -228,9 +228,9 @@ public class PersistService extends Service {
                     @Override
                     public void onResponse(JSONObject response) {
                         {
-                            Log.e("==>", response.toString());
+                            //Log.e("==>", response.toString());
                             String url = Constants.IS_CATEGORY_PRESENT+"/"+userSessionManager.getUserDetails().get(KEY_EMAIL)+"/"+categoryName;
-                            isCategoryPresent(url,46.76843,23.58898);
+                            //isCategoryPresent(url,46.76843,23.58898);
                         }
                     }
                 },
@@ -405,7 +405,7 @@ public class PersistService extends Service {
                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "default")
                                     .setSmallIcon(R.drawable.spinner_background)
                                     .setContentTitle("new category detected")
-                                    .setContentText("You made a transaction in a new category: "+categoryName+". Do you want it to be added to your categories")
+                                    .setContentText("Do you want to add category "+categoryName+"?")
                                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                     .setContentIntent(newTransactionPendingIntent)
                                     .addAction(R.drawable.spinner_background, "yes",

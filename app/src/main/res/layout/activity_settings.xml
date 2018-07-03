@@ -2,10 +2,29 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/categories_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/wallet3"
-    tools:context="com.example.stefao.smsreader.view.recommend.RecommendActivity">
+    tools:context="com.example.stefao.smsreader.view.settings.SettingsActivity">
+    <!--android:background="#C0000000">-->
+
+    <!--<include layout="@layout/content_main" />-->
+
+    <!--<android.support.design.widget.AppBarLayout-->
+    <!--android:id="@+id/appbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="300dp">-->
+
+    <!--<android.support.design.widget.CoordinatorLayout-->
+    <!--android:id="@+id/collapsing_toolbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_scrollFlags="exitUntilCollapsed|scroll"-->
+    <!--app:contentScrim="?attr/colorPrimary"-->
+    <!--app:title="Budget manager"-->
+    <!--app:expandedTitleMarginStart="8dp"-->
+    <!--app:expandedTitleMarginEnd="94dp">-->
 
 
     <android.support.design.widget.AppBarLayout
@@ -24,12 +43,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#C0000000"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
 
         <TableLayout
             android:id="@+id/LinearLayout4"
@@ -38,36 +60,28 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <!--<Button-->
-            <!--android:id="@+id/recommend_button"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="48dp"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:text="@string/recommend"-->
-            <!--tools:layout_editor_absoluteY="82dp" />-->
-
-            <Spinner
-                android:id="@+id/spinner1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="100dp"
-                android:layout_marginRight="100dp"
-
-                android:background="#1FDB84"
-                android:entries="@array/category_array"
-                android:prompt="@string/category_prompt" />
 
             <Button
-                android:id="@+id/btnSubmit"
-                android:layout_width="wrap_content"
+                android:id="@+id/button_setTotalBudget"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignWithParentIfMissing="true"
+                android:background="@drawable/mybutonn"
+                android:focusable="false"
+                android:gravity="center_vertical"
+                android:onClick="clickedSetTotalBudget"
+                android:text="set budget"
                 android:layout_marginLeft="100dp"
                 android:layout_marginRight="100dp"
-                android:background="@drawable/mybutonn"
-                android:text="Submit" />
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
 
         </TableLayout>
+
+
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>
-
