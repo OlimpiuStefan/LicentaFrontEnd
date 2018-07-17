@@ -38,9 +38,9 @@
     <string name="menu">Menu</string>
 
     <string-array name="category_array">
-        <item>subcategory1</item>
-        <item>subcategory2</item>
-        <item>subcategory3</item>
+        <item>books</item>
+        <item>restaurant</item>
+        <item>supermarket</item>
         <item>clothes</item>
     </string-array>
 

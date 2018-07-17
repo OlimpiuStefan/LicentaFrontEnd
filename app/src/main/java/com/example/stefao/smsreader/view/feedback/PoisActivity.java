@@ -48,6 +48,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.stefao.smsreader.view.categories.PoiAdapter;
 import com.example.stefao.smsreader.view.feedback.FeedbackActivity;
+import com.example.stefao.smsreader.view.settings.SettingsActivity;
 import com.example.stefao.smsreader.view.utils.MultiSpinner;
 import com.example.stefao.smsreader.R;
 import com.example.stefao.smsreader.view.transactions.TransactionsActivity;
@@ -162,12 +163,12 @@ public class PoisActivity extends AppCompatActivity  {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 
     public void getPoisForLoggedUser(String url) {
         RequestQueue queue = Volley.newRequestQueue(this);

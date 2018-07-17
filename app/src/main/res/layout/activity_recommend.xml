@@ -46,14 +46,16 @@
             <!--android:text="@string/recommend"-->
             <!--tools:layout_editor_absoluteY="82dp" />-->
 
-            <Spinner
+            <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/spinner1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100dp"
                 android:layout_marginRight="100dp"
 
-                android:background="#1FDB84"
+                android:popupBackground="@color/white"
+                android:background="@color/white"
+                app:background="@color/white"
                 android:entries="@array/category_array"
                 android:prompt="@string/category_prompt" />
 

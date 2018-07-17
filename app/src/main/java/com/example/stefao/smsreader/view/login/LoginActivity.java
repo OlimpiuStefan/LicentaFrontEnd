@@ -48,15 +48,15 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = new LoginViewModel();
         session = new UserSessionManager(getApplicationContext());
         ButterKnife.bind(this);
-        userCredentials.get(0).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    userCredentials.get(0).setHintTextColor((Color.parseColor("#1FDB84")));
-                } else {
-                    // set which color you want when edittext is focused
-                }
-            }});
+//        userCredentials.get(0).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//                if (!b) {
+//                    userCredentials.get(0).setHintTextColor((Color.parseColor("#1FDB84")));
+//                } else {
+//                    // set which color you want when edittext is focused
+//                }
+//            }});
     }
 
 
@@ -80,8 +80,8 @@ public class LoginActivity extends AppCompatActivity {
 //
 //
 //        pDialog = new ProgressDialog(this);
-//        pDialog.setTitle("Trying to log in..");
-//        pDialog.setMessage("Please wat...");
+//        pDialog.setTitle("Logging in ...");
+//        pDialog.setMessage("Please wait");
 //        pDialog.setCancelable(false);
 //        pDialog.show();
 //

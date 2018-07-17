@@ -342,10 +342,22 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+
             }
         });
 
-        builder.show();
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setTextColor(Color.parseColor("#1FDB84"));
+
+        Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setTextColor(Color.parseColor("#1FDB84"));
+
+
+        //builder.show();
     }
 
 

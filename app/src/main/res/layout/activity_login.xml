@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:background="@drawable/wallet">
 
@@ -26,7 +27,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+            android:textColorHint="@color/white">
             <EditText android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -34,6 +37,9 @@
                 android:hint="Username"
                 android:textColorHint="@color/white"
                 android:textColor="@color/white"
+                app:backgroundTint="#1FDB84"
+                android:theme="@style/EditTextTheme"
+                style="@style/App_EditTextStyle"
                 />
         </android.support.design.widget.TextInputLayout>
 
@@ -42,12 +48,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+            android:textColorHint="@color/white">
             <EditText android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:hint="Password"
+                app:backgroundTint="#1FDB84"
+                android:theme="@style/EditTextTheme"
                 android:textColorHint="@color/white"
                 android:textColor="@color/white"/>
         </android.support.design.widget.TextInputLayout>

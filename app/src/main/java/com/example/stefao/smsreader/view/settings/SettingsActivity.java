@@ -114,7 +114,15 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        builder.show();
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setTextColor(Color.parseColor("#1FDB84"));
+
+        Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setTextColor(Color.parseColor("#1FDB84"));
 
     }
 
@@ -134,7 +142,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);

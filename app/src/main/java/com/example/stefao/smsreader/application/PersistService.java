@@ -119,10 +119,11 @@ public class PersistService extends Service {
                     userLocation.setLatitude(location.getLatitude());
                     userLocation.setLongitude(location.getLongitude());
                     userLocation.setLocationSetted(true);
-                    Log.e("==>", currentLatitude.toString());
-                    Log.e("==>", currentLongitude.toString());
-                    Log.e("==>", userLocation.getLatitude() + "");
-                    String nominatimQuery = "https://nominatim.openstreetmap.org/reverse?email=so5olimpiu@yahoo.com&format=json&lat=" + "46.76843" + "&lon=" + "23.58898" + "&extratags=1&namedetails=1";
+                    Log.e("LOCATIAAAAAAAAAAA", currentLatitude.toString());
+                    Log.e("LOCATIAAAAAAAAAAA", currentLongitude.toString());
+                    Log.e("LOCATIAAAAAAAAAAA", userLocation.getLatitude() + "");
+                    //String nominatimQuery = "https://nominatim.openstreetmap.org/reverse?email=so5olimpiu@yahoo.com&format=json&lat=" + "46.76843" + "&lon=" + "23.58898" + "&extratags=1&namedetails=1";
+                    String nominatimQuery = "https://nominatim.openstreetmap.org/reverse?email=so5olimpiu@yahoo.com&format=json&lat=" + userLocation.getLatitude() + "&lon=" + userLocation.getLongitude() + "&extratags=1&namedetails=1";
                     //String nominatimQuery = "https://nominatim.openstreetmap.org/reverse?email=so5olimpiu@yahoo.com&format=json&lat=" + "46.76833" + "&lon=" + "23.58923" + "&extratags=1&namedetails=1";
                     getData(nominatimQuery);
                     Toast.makeText(getApplicationContext(), currentLatitude.toString(), Toast.LENGTH_LONG).show();
@@ -166,10 +167,12 @@ public class PersistService extends Service {
                             e.printStackTrace();
                         }
 
-                        addPoi(46.76843,23.58898,response,userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName);
+                        //addPoi(46.76843,23.58898,response,userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName);
+                        addPoi(userLocation.getLatitude(),userLocation.getLongitude(),response,userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName);
                        // addPoi(46.76833,23.58923,response,userSessionManager.getUserDetails().get(KEY_EMAIL));
                         String url = Constants.IS_CATEGORY_PRESENT+"/"+userSessionManager.getUserDetails().get(KEY_EMAIL)+"/"+categoryName;
-                        isCategoryPresent(url,46.76843,23.58898);
+                        //isCategoryPresent(url,46.76843,23.58898);
+                        isCategoryPresent(url,userLocation.getLatitude(),userLocation.getLongitude(),categoryName);
                         //addTransaction(userSessionManager.getUserDetails().get(KEY_EMAIL),categoryName,userTransaction.getAmount(),userTransaction.getDate(),userTransaction.getMessage());
 //                        String poiName ="";
 //                        try {
@@ -373,7 +376,7 @@ public class PersistService extends Service {
         requestQueue.add(request);
     }
 
-    public void isCategoryPresent (String url, final double latitude, final double longitude) {
+    public void isCategoryPresent (String url, final double latitude, final double longitude, final String categoryName) {
         RequestQueue queue = Volley.newRequestQueue(this);
         final Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type","application/json");
@@ -392,6 +395,7 @@ public class PersistService extends Service {
                             //This is optional if you have more than one buttons and want to differentiate between two
                             intentAction.putExtra("username",userSessionManager.getUserDetails().get(KEY_EMAIL));
                             intentAction.putExtra("categoryName", categoryName);
+                            intentAction.putExtra("categoryType", categoryName);
                             intentAction.putExtra("amount", userTransaction.getAmount());
                             intentAction.putExtra("date",userTransaction.getDate());
                             intentAction.putExtra("message",userTransaction.getMessage());
@@ -400,7 +404,11 @@ public class PersistService extends Service {
 
 
                             PendingIntent newTransactionPendingIntent =
-                                    PendingIntent.getBroadcast(getApplicationContext(), 0, intentAction, 0);
+                                    PendingIntent.getBroadcast(getApplicationContext(), 0, intentAction, PendingIntent.FLAG_UPDATE_CURRENT);
+
+//                            newTransactionPendingIntent.cancel();
+//
+//                            newTransactionPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intentAction, 0);
 
                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "default")
                                     .setSmallIcon(R.drawable.spinner_background)

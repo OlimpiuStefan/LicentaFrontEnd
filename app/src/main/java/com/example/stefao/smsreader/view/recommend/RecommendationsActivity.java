@@ -1,6 +1,7 @@
 package com.example.stefao.smsreader.view.recommend;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -35,6 +36,7 @@ import com.example.stefao.smsreader.utils.Constants;
 import com.example.stefao.smsreader.utils.UserSessionManager;
 import com.example.stefao.smsreader.view.recommend.PoiFrequencyAdapter;
 import com.example.stefao.smsreader.view.recommend.PoiRatingAdapter;
+import com.example.stefao.smsreader.view.settings.SettingsActivity;
 import com.example.stefao.smsreader.viewmodel.recommend.RecommendViewModel;
 import com.example.stefao.smsreader.viewmodel.transactions.TransactionsViewModel;
 import com.google.gson.Gson;
@@ -128,11 +130,11 @@ public class RecommendationsActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }

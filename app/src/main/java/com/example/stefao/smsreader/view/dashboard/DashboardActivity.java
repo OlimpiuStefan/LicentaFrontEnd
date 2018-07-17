@@ -44,6 +44,8 @@ public class DashboardActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.collapsing_toolbar);
         toolbar.setContentScrimColor(Color.parseColor("#363232"));
         toolbar.setBackgroundColor(Color.parseColor("#363232"));
+        toolbar.setTitle(getTitle());
+        toolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
         session = new UserSessionManager(getApplicationContext());
         ButterKnife.bind(this);
     }

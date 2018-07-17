@@ -35,6 +35,7 @@ import com.example.stefao.smsreader.model.TransactionDTO;
 import com.example.stefao.smsreader.utils.Constants;
 import com.example.stefao.smsreader.utils.UserSessionManager;
 import com.example.stefao.smsreader.view.feedback.PoisActivity;
+import com.example.stefao.smsreader.view.settings.SettingsActivity;
 import com.example.stefao.smsreader.viewmodel.transactions.TransactionsViewModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -130,7 +131,8 @@ public class TransactionsActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);

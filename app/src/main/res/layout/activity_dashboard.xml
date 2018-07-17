@@ -21,7 +21,8 @@
             app:contentScrim="@color/black"
             app:title="Budget manager"
             app:expandedTitleMarginStart="8dp"
-            app:expandedTitleMarginEnd="94dp">
+            app:expandedTitleMarginEnd="94dp"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

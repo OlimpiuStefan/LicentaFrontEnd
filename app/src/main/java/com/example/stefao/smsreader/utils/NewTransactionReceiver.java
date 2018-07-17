@@ -36,6 +36,7 @@ public class NewTransactionReceiver  extends BroadcastReceiver {
 
         String username =intent.getStringExtra("username");
         String categoryName =intent.getStringExtra("categoryName");
+        String categoryType =intent.getStringExtra("categoryType");
         double amount =intent.getDoubleExtra("amount",0);
         String date =intent.getStringExtra("date");
         String message =intent.getStringExtra("message");
@@ -43,7 +44,7 @@ public class NewTransactionReceiver  extends BroadcastReceiver {
         double longitude = intent.getDoubleExtra("longitude", 0);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.cancel(2);
-        addTransaction(username,categoryName,amount,date,message, context, latitude, longitude);
+        addTransaction(username,categoryType,amount,date,message, context, latitude, longitude);
 
         //This is used to close the notification tray
         //Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);

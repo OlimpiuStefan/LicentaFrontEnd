@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,6 +28,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.OnClick;
 
@@ -52,8 +54,8 @@ public class LoginViewModel {
 
 
         pDialog = new ProgressDialog(context);
-        pDialog.setTitle("Trying to log in..");
-        pDialog.setMessage("Please wat...");
+        pDialog.setTitle("Logging in ...");
+        pDialog.setMessage("Please wait");
         pDialog.setCancelable(false);
         pDialog.show();
 
@@ -94,6 +96,10 @@ public class LoginViewModel {
                 return headers;
             }
         };
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                (int) TimeUnit.SECONDS.toMillis(100),
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonObjectRequest);
     }
 
